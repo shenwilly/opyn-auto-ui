@@ -11,16 +11,34 @@ interface ModalProps {
 const ModalOtoken: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   return (
       <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader />
-            <ModalCloseButton />
-            <ModalBody p="5">
-              <Text textAlign="center">
-                Modal
-              </Text>
-            </ModalBody>
-          </ModalContent>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <Text>
+              oWETHUSDC/WETH-30JUL21-2200P
+            </Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Asset: WETH
+            </Text>
+            
+            <Text>
+              Strike: USDC 1000
+            </Text>
+
+            <Text>
+              Amount: 1 
+            </Text>
+
+            <Text>
+              Expiry: Fri, 31 Dec 2021
+            </Text>
+
+            <Button w="100%" colorScheme="orange" mt={5} mb={3}>Cancel</Button>
+          </ModalBody>
+        </ModalContent>
       </Modal>
   );
 };
