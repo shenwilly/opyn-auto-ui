@@ -40,13 +40,13 @@ const PanelSeller: React.FC = () => {
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200P</Td>
                 <Td textAlign="center">Waiting Expiry</Td>
                 <Td>
-                  <Button w="100%" colorScheme="orange">Cancel Auto</Button>
+                  <Button w="100%" colorScheme="blue">Details</Button>
                 </Td>
               </Tr>
             </Tbody>
           </Table>
 
-          <Text my="4">History</Text>
+          <Text my="4">Order History</Text>
           <Table variant="simple">
             <Thead>
               <Tr>
