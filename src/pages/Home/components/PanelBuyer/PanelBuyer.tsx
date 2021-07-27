@@ -9,7 +9,13 @@ import {
   Button,
 } from "@chakra-ui/react"
 
+import ModalOtoken from "../../../../components/ModalOtoken";
+import ModalRedeem from "../../../../components/ModalRedeem/ModalRedeem";
+
 const PanelBuyer: React.FC = () => {
+    const useRedeemModal = useDisclosure();
+    const useDetailModal = useDisclosure();
+    // const [oToken, setOToken] = useState();
 
     return (
         <>
@@ -46,7 +52,7 @@ const PanelBuyer: React.FC = () => {
                 <Td isNumeric>0.5</Td>
                 <Td textAlign="center">Waiting Expiry</Td>
                 <Td>
-                  <Button w="100%" colorScheme="blue">Details</Button>
+                  <Button w="100%" colorScheme="blue" onClick={useDetailModal.onOpen}>Details</Button>
                 </Td>
               </Tr>
               <Tr>
@@ -57,7 +63,7 @@ const PanelBuyer: React.FC = () => {
                 <Td isNumeric>0.5</Td>
                 <Td textAlign="center">Waiting Redeem</Td>
                 <Td>
-                  <Button w="100%" colorScheme="blue">Details</Button>
+                  <Button w="100%" colorScheme="blue" onClick={useDetailModal.onOpen}>Details</Button>
                 </Td>
               </Tr>
             </Tbody>
@@ -97,6 +103,9 @@ const PanelBuyer: React.FC = () => {
               </Tr>
             </Tbody>
           </Table>
+
+          <ModalRedeem isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>
+          <ModalOtoken isOpen={useDetailModal.isOpen} onClose={useDetailModal.onClose}/>
         </>
     );
 };

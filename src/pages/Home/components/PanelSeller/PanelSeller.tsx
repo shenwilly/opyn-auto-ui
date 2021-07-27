@@ -8,8 +8,12 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react"
+import ModalSettle from "../../../../components/ModalSettle";
+import ModalVault from "../../../../components/ModalVault";
 
 const PanelSeller: React.FC = () => {
+  const useSettleModal = useDisclosure();
+  const useVaultModal = useDisclosure();
 
     return (
         <>
@@ -31,7 +35,7 @@ const PanelSeller: React.FC = () => {
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
                 <Td textAlign="center">-</Td>
                 <Td>
-                  <Button w="100%" colorScheme="green">Auto Settle</Button>
+                  <Button w="100%" colorScheme="green" onClick={useSettleModal.onOpen}>Auto Settle</Button>
                 </Td>
               </Tr>
               <Tr>
@@ -40,7 +44,7 @@ const PanelSeller: React.FC = () => {
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200P</Td>
                 <Td textAlign="center">Waiting Expiry</Td>
                 <Td>
-                  <Button w="100%" colorScheme="blue">Details</Button>
+                  <Button w="100%" colorScheme="blue" onClick={useVaultModal.onOpen}>Details</Button>
                 </Td>
               </Tr>
             </Tbody>
@@ -67,6 +71,9 @@ const PanelSeller: React.FC = () => {
               </Tr>
             </Tbody>
           </Table>
+
+          <ModalSettle isOpen={useSettleModal.isOpen} onClose={useSettleModal.onClose}/>
+          <ModalVault isOpen={useVaultModal.isOpen} onClose={useVaultModal.onClose}/>
         </>
     );
 };
