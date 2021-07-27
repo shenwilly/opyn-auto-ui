@@ -1,27 +1,21 @@
-import { Container, Flex, Spacer, Text, Button, useColorMode } from "@chakra-ui/react"
+import { Container, Flex, Spacer, Text, Button } from "@chakra-ui/react"
 import styled from "styled-components";
-import { FaSun, FaMoon } from "react-icons/fa";
 
 const Header = () => {
-    const { colorMode, toggleColorMode } = useColorMode()
 
     return (
         <StyledHeader maxW="container.xl">
             <StyledRow align="center">
-                <Text textStyle="appTitle">AppName</Text>
+                <Text textStyle="appTitle">Opyn Auto</Text>
                 <Spacer />
-                <Button onClick={toggleColorMode} p="2" size="md" variant="ghost">
-                    {colorMode === "light" 
-                        ? <FaSun />
-                        : <FaMoon />}
-                </Button>
+                <Button>Connect 🦊</Button>
             </StyledRow>
         </StyledHeader>
     );
 };
 
 const StyledHeader = styled(Container)`
-    background-color: lightgrey;
+    // background-color: lightgrey;
 `
 const StyledRow = styled(Flex)`
     height: ${props => props.theme.headerHeight};
