@@ -7,7 +7,11 @@ import {
   Td,
   Text,
   Button,
+  Flex,
+  Link,
+  useDisclosure
 } from "@chakra-ui/react"
+import { BiLinkExternal } from 'react-icons/bi';
 import ModalSettle from "../../../../components/ModalSettle";
 import ModalVault from "../../../../components/ModalVault";
 
@@ -66,7 +70,11 @@ const PanelSeller: React.FC = () => {
                 <Td>-</Td>
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
                 <Td>
-                  Settled
+                  <Link href="https://chakra-ui.com" isExternal>
+                      <Flex as="u">
+                        <Text mr="2">Settled</Text> <BiLinkExternal/>
+                      </Flex>
+                    </Link>
                 </Td>
               </Tr>
             </Tbody>
