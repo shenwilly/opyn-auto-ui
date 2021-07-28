@@ -6,6 +6,7 @@ import styled, { ThemeProvider } from "styled-components"
 import Home from "./pages/Home"
 import Header from "./components/Header"
 import chakraTheme from "./utils/chakraTheme"
+import { EthereumProvider } from "./contexts/Ethereum"
 
 function App() {
   return (
@@ -45,7 +46,9 @@ const Providers: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={styledTheme}>
       <ChakraProvider theme={chakraTheme}>
-        {children}
+        <EthereumProvider>
+          {children}
+        </EthereumProvider>
       </ChakraProvider>
     </ThemeProvider>
   );
