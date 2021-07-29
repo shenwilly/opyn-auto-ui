@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect } from 'react'
 
-import { OTokenBalance, SubgraphVault } from '../types'
+import { SubgraphVault } from '../types'
 import { getVaults } from '../utils/graph'
 import { CHAIN_ID } from '../constants/networks'
+import { DEFAULT_INTERVAL } from '../constants'
 
 export function useVaults(
   account: string,
@@ -18,14 +19,14 @@ export function useVaults(
   }, [setRefreshCount])
 
   useEffect(() => {
-    async function updateBalances() {
+    async function updateVaults() {
       const vaults = await getVaults(chainId, account);
       if (vaults === null) return
       setIsLoading(false)
       setVaults(vaults)
     }
-    updateBalances()
-    const interval = setInterval(updateBalances, 10000)
+    updateVaults()
+    const interval = setInterval(updateVaults, DEFAULT_INTERVAL)
     return () => clearInterval(interval)
   }, [chainId, account, refreshCount])
 

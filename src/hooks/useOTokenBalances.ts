@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { OTokenBalance } from '../types'
 import { getBalances } from '../utils/graph'
 import { CHAIN_ID } from '../constants/networks'
+import { DEFAULT_INTERVAL } from '../constants'
 
 export function useOTokenBalances(
   account: string,
@@ -25,7 +26,7 @@ export function useOTokenBalances(
       setBalances(balances)
     }
     updateBalances()
-    const interval = setInterval(updateBalances, 10000)
+    const interval = setInterval(updateBalances, DEFAULT_INTERVAL)
     return () => clearInterval(interval)
   }, [chainId, account, refreshCount])
 
