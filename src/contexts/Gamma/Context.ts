@@ -6,6 +6,8 @@ const Context = createContext<ContextValues>({
   balancesIsLoading: false,
   vaults: null,
   vaultsIsLoading: false,
+  orders: null,
+  ordersIsLoading: false,
 });
 
 export default Context;
