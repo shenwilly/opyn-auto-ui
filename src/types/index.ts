@@ -36,3 +36,13 @@ export type OTokenBalance = {
   token: SubgraphOToken
   balance: BigNumber
 }
+
+export type SubgraphVault = {
+  vaultId: string
+  collateralAmount: string | null
+  collateralAsset: SubgraphToken | null
+  longAmount: string | null
+  longOToken: SubgraphOToken | null
+  shortAmount: string | null
+  shortOToken: SubgraphOToken | null
+}

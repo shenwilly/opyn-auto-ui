@@ -1,7 +1,7 @@
 import { BigNumber } from "ethers"
 import { CHAIN_ID } from "../constants"
-import { graphEndpoints } from "../constants/endpoints"
-import { OTokenBalance } from "../types"
+import { graphGammaEndpoints } from "../constants/endpoints"
+import { OTokenBalance, SubgraphVault } from "../types"
 
 export async function getBalances(
   chainId: CHAIN_ID,
@@ -40,7 +40,7 @@ export async function getBalances(
   }`
 
   try {
-    const response = await postQuery(graphEndpoints[chainId], query)
+    const response = await postQuery(graphGammaEndpoints[chainId], query)
     const balances = response.data.accountBalances
     return balances
       .map((b: OTokenBalance) => {
@@ -50,6 +50,56 @@ export async function getBalances(
         }
       })
       .filter((b: OTokenBalance) => !b.balance.isZero())
+  } catch (error) {
+    errorCallback(error)
+    return null
+  }
+}
+
+export async function getVaults(
+  chainId: CHAIN_ID,
+  account: string,
+  errorCallback: Function = () => {},
+): Promise<SubgraphVault[] | null> {
+  const query = `
+  {
+    account(id: "${account}") {
+      vaults {
+        vaultId
+        collateralAsset {
+          id
+          symbol
+          decimals
+        }
+        collateralAmount
+        shortOToken{
+          id
+          symbol
+          decimals
+          expiryTimestamp
+          underlyingAsset {
+            symbol
+            id
+          }
+        }
+        shortAmount
+        longOToken {
+          id
+          symbol
+          decimals
+          expiryTimestamp
+          underlyingAsset {
+            symbol
+            id
+          }
+        }
+        longAmount
+      }
+    }
+  }`
+  try {
+    const response = await postQuery(graphGammaEndpoints[chainId], query)
+    return response.data.vaults
   } catch (error) {
     errorCallback(error)
     return null
