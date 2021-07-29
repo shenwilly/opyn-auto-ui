@@ -9,7 +9,7 @@ const Provider: React.FC = ({ children }) => {
     const [ethAccount, setEthAccount] = useState<Signer>();
     const [accountAddress, setAccountAddress] = useState<string>("");
     const [injectedProvider, setInjectedProvider] = useState<Web3Provider>();
-    const [chainId, setChainId] = useState<number>();
+    const [chainId, setChainId] = useState<number>(CHAIN_ID.MAINNET);
 
     const loadWeb3Modal = useCallback(async () => {
         const provider = await web3Modal.connect();
@@ -20,7 +20,7 @@ const Provider: React.FC = ({ children }) => {
         setEthAccount(signer);
 
         const address = await signer.getAddress();
-        setAccountAddress(address);
+        setAccountAddress(address.toLowerCase());
 
         const network = await web3Provider.getNetwork();
         setChainId(network.chainId);

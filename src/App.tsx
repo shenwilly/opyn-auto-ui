@@ -7,6 +7,7 @@ import Home from "./pages/Home"
 import Header from "./components/Header"
 import chakraTheme from "./utils/chakraTheme"
 import { EthereumProvider } from "./contexts/Ethereum"
+import { GammaProvider } from "./contexts/Gamma"
 
 function App() {
   return (
@@ -47,7 +48,9 @@ const Providers: React.FC = ({ children }) => {
     <ThemeProvider theme={styledTheme}>
       <ChakraProvider theme={chakraTheme}>
         <EthereumProvider>
-          {children}
+          <GammaProvider>
+            {children}
+          </GammaProvider>
         </EthereumProvider>
       </ChakraProvider>
     </ThemeProvider>

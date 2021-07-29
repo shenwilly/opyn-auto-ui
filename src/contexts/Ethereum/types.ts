@@ -7,7 +7,7 @@ export interface ContextValues {
     accountAddress: string,
     injectedProvider?: providers.Web3Provider,
     web3Modal?: Web3Modal,
-    chainId?: number,
+    chainId: number,
     switchChain: (network: CHAIN_ID) => void,
     loadWeb3Modal: () => void,
     logoutOfWeb3Modal: () => void,

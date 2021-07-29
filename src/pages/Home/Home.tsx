@@ -1,6 +1,7 @@
 import { Button, Box, HStack, VStack } from "@chakra-ui/react"
 import { useState } from "react";
 import Page from "../../components/Page";
+import useGamma from "../../hooks/useGamma";
 import PanelBuyer from "./components/PanelBuyer";
 import PanelSeller from "./components/PanelSeller";
 
@@ -10,7 +11,10 @@ enum HomeMenu {
 }
 
 const Home = () => {
+    const { balances } = useGamma();
     const [menu, setMenu] = useState<HomeMenu>(HomeMenu.Buyer);
+
+    console.log(balances);
     
     return (
         <Page>

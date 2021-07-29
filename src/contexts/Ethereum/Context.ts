@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { CHAIN_ID } from "../../constants";
 import { ContextValues } from "./types";
 
 const Context = createContext<ContextValues>({
@@ -6,7 +7,7 @@ const Context = createContext<ContextValues>({
     accountAddress: "",
     web3Modal: undefined,
     injectedProvider: undefined,
-    chainId: undefined,
+    chainId: CHAIN_ID.MAINNET,
     switchChain: (_) => {},
     loadWeb3Modal: () => {},
     logoutOfWeb3Modal: () => {}

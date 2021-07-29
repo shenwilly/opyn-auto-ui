@@ -1,0 +1,33 @@
+import { useState, useCallback, useEffect } from 'react'
+
+import { OTokenBalance } from '../types'
+import { getBalances } from '../utils/graph'
+import { CHAIN_ID } from '../constants/networks'
+
+export function useOTokenBalances(
+  account: string,
+  chainId: CHAIN_ID,
+): { balances: OTokenBalance[] | null; refetch: Function; isLoading: boolean } {
+  const [balances, setBalances] = useState<OTokenBalance[]>([])
+
+  const [refreshCount, setRefreshCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const refetch = useCallback(() => {
+    setRefreshCount(count => count + 1)
+  }, [setRefreshCount])
+
+  useEffect(() => {
+    async function updateBalances() {
+      const balances = await getBalances(chainId, account)
+      if (balances === null) return
+      setIsLoading(false)
+      setBalances(balances)
+    }
+    updateBalances()
+    const interval = setInterval(updateBalances, 10000)
+    return () => clearInterval(interval)
+  }, [chainId, account, refreshCount])
+
+  return { balances, isLoading, refetch }
+}
