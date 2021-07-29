@@ -5,3 +5,4 @@ export const graphGammaEndpoints: {[key in CHAIN_ID]: string} = {
   [CHAIN_ID.ROPSTEN]: "https://api.thegraph.com/subgraphs/name/opynfinance/gamma-ropsten",
 };
 
+export const graphAutoRedeemEndpoint = "https://api.thegraph.com/subgraphs/name/shenwilly/opyn-auto";
