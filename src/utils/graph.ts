@@ -1,7 +1,7 @@
 import { BigNumber } from "ethers"
 import { CHAIN_ID } from "../constants"
-import { graphGammaEndpoints } from "../constants/endpoints"
-import { OTokenBalance, SubgraphVault } from "../types"
+import { graphAutoRedeemEndpoint, graphGammaEndpoints } from "../constants/endpoints"
+import { OTokenBalance, SubgraphOrder, SubgraphVault } from "../types"
 
 export async function getBalances(
   chainId: CHAIN_ID,
@@ -99,6 +99,33 @@ export async function getVaults(
   }`
   try {
     const response = await postQuery(graphGammaEndpoints[chainId], query)
+    return response.data.vaults
+  } catch (error) {
+    errorCallback(error)
+    return null
+  }
+}
+
+export async function getOrders(
+  chainId: CHAIN_ID,
+  account: string,
+  errorCallback: Function = () => {},
+): Promise<SubgraphOrder[] | null> {
+  const query = `
+  {
+    orders(owner: "${account}") {
+      orderId
+      owner
+      otoken
+      amount
+      vaultId
+      isSeller
+      toETH
+      finished
+    }
+  }`
+  try {
+    const response = await postQuery(graphAutoRedeemEndpoint[chainId], query)
     return response.data.vaults
   } catch (error) {
     errorCallback(error)

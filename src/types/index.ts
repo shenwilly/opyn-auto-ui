@@ -46,3 +46,14 @@ export type SubgraphVault = {
   shortAmount: string | null
   shortOToken: SubgraphOToken | null
 }
+
+export type SubgraphOrder = {
+  orderId: string
+  owner: string
+  otoken: string
+  amount: string
+  vaultId: string
+  isSeller: boolean
+  toEth: boolean
+  finished: boolean
+}
