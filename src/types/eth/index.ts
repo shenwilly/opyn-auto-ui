@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ERC20 } from "./ERC20";
+export type { GammaController } from "./GammaController";
 export type { GammaRedeemer } from "./GammaRedeemer";
 
 export { ERC20__factory } from "./factories/ERC20__factory";
+export { GammaController__factory } from "./factories/GammaController__factory";
 export { GammaRedeemer__factory } from "./factories/GammaRedeemer__factory";
