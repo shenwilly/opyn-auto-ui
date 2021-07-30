@@ -8,8 +8,12 @@ import Header from "./components/Header"
 import chakraTheme from "./utils/chakraTheme"
 import { EthereumProvider } from "./contexts/Ethereum"
 import { GammaProvider } from "./contexts/Gamma"
+import ModalNetwork from "./components/ModalNetwork"
+import useEthereum from "./hooks/useEthereum"
+import { CHAIN_ID } from "./constants"
 
 function App() {
+  const { chainId } = useEthereum();
   return (
     <Router>
       <SiteWrapper>
@@ -25,6 +29,7 @@ function App() {
           </Switch>
         </BodyWrapper>
       </SiteWrapper>
+      <ModalNetwork isOpen={chainId !== undefined && !(chainId in CHAIN_ID)} />
     </Router>
   );
 }

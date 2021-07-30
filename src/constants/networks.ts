@@ -7,7 +7,7 @@ export enum CHAIN_ID {
 
 export const CHAIN_METADATA: {[key in CHAIN_ID]: ETHEREUM_CHAIN} = {
   [CHAIN_ID.MAINNET]: {
-    chainId: "0x01",
+    chainId: "0x1",
     chainName: "Ethereum Mainnet",
     nativeCurrency: {
       name: "Ether",
@@ -18,7 +18,7 @@ export const CHAIN_METADATA: {[key in CHAIN_ID]: ETHEREUM_CHAIN} = {
     blockExplorerUrls: [],
   },
   [CHAIN_ID.ROPSTEN]: {
-    chainId: "0x03",
+    chainId: "0x3",
     chainName: "Ropsten",
     nativeCurrency: {
       name: "Ether",

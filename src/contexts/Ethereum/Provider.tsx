@@ -43,6 +43,7 @@ const Provider: React.FC = ({ children }) => {
               method: 'wallet_switchEthereumChain',
               params: [{ chainId: chainMetadata.chainId }],
             });
+            window.location.reload();
         } catch (switchError: any) {
             if (switchError.code === 4902) {
               try {
@@ -55,8 +56,6 @@ const Provider: React.FC = ({ children }) => {
               }
             }
         }  
-        
-        window.location.reload();
     };
 
     useEffect(() => {
