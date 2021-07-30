@@ -1,8 +1,7 @@
-import { BigNumber, constants, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 import useEthereum from './useEthereum'
 import ControllerAbi from "../constants/abis/GammaController.json";
-import { ERC20 } from '../types/eth/ERC20';
 import { CHAIN_ID, DEFAULT_INTERVAL } from '../constants';
 import { GammaController } from '../types/eth/GammaController';
 import { GAMMA_CONTROLLER_ADDRESS } from '../constants/address';
