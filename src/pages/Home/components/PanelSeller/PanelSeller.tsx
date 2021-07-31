@@ -14,10 +14,14 @@ import {
 import { BiLinkExternal } from 'react-icons/bi';
 import ModalSettle from "../../../../components/ModalSettle";
 import ModalVault from "../../../../components/ModalVault";
+import useGamma from "../../../../hooks/useGamma";
 
 const PanelSeller: React.FC = () => {
-  const useSettleModal = useDisclosure();
-  const useVaultModal = useDisclosure();
+    const { vaults, orders } = useGamma();
+    const useSettleModal = useDisclosure();
+    const useVaultModal = useDisclosure();
+
+    const pastOrders = orders?.filter((order) => order.finished) ?? [];
 
     return (
         <>
@@ -33,7 +37,18 @@ const PanelSeller: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
+              {vaults && vaults.map((vault) => (
+                <Tr>
+                  <Td>WETH 0.1</Td>
+                  <Td>-</Td>
+                  <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
+                  <Td textAlign="center">-</Td>
+                  <Td>
+                    <Button w="100%" colorScheme="green" onClick={useSettleModal.onOpen}>Auto Settle</Button>
+                  </Td>
+                </Tr>
+              ))}
+              {/* <Tr>
                 <Td>WETH 0.1</Td>
                 <Td>-</Td>
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
@@ -50,7 +65,7 @@ const PanelSeller: React.FC = () => {
                 <Td>
                   <Button w="100%" colorScheme="blue" onClick={useVaultModal.onOpen}>Details</Button>
                 </Td>
-              </Tr>
+              </Tr> */}
             </Tbody>
           </Table>
 
@@ -65,7 +80,21 @@ const PanelSeller: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
+              {pastOrders && pastOrders.map((order) => (
+                <Tr>
+                  <Td>WETH 0.1</Td>
+                  <Td>-</Td>
+                  <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
+                  <Td>
+                    <Link href="https://chakra-ui.com" isExternal>
+                        <Flex as="u">
+                          <Text mr="2">Settled</Text> <BiLinkExternal/>
+                        </Flex>
+                      </Link>
+                  </Td>
+                </Tr>
+              ))}
+              {/* <Tr>
                 <Td>WETH 0.1</Td>
                 <Td>-</Td>
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
@@ -76,7 +105,7 @@ const PanelSeller: React.FC = () => {
                       </Flex>
                     </Link>
                 </Td>
-              </Tr>
+              </Tr> */}
             </Tbody>
           </Table>
 

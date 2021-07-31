@@ -12,14 +12,18 @@ import {
   Flex,
 } from "@chakra-ui/react"
 import { BiLinkExternal } from 'react-icons/bi';
-
 import ModalOtoken from "../../../../components/ModalOtoken";
 import ModalRedeem from "../../../../components/ModalRedeem/ModalRedeem";
+import useGamma from "../../../../hooks/useGamma";
 
 const PanelBuyer: React.FC = () => {
+    const { balances, orders } = useGamma();
+    
     const useRedeemModal = useDisclosure();
     const useDetailModal = useDisclosure();
     // const [oToken, setOToken] = useState();
+
+    const pastOrders = orders?.filter((order) => order.finished) ?? [];
 
     return (
         <>
@@ -37,7 +41,20 @@ const PanelBuyer: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
+              {balances && balances.map((otoken) => (
+                <Tr>
+                  <Td>Call</Td>
+                  <Td>WETH</Td>
+                  <Td>USDC 5000</Td>
+                  <Td>Fri, 31 Dec 2021</Td>
+                  <Td isNumeric>0.5</Td>
+                  <Td textAlign="center">-</Td>
+                  <Td>
+                    <Button w="100%" colorScheme="green" onClick={useRedeemModal.onOpen}>Auto Redeem</Button>
+                  </Td>
+                </Tr>
+              ))}
+              {/* <Tr>
                 <Td>Call</Td>
                 <Td>WETH</Td>
                 <Td>USDC 5000</Td>
@@ -69,7 +86,7 @@ const PanelBuyer: React.FC = () => {
                 <Td>
                   <Button w="100%" colorScheme="blue" onClick={useDetailModal.onOpen}>Details</Button>
                 </Td>
-              </Tr>
+              </Tr> */}
             </Tbody>
           </Table>
 
@@ -87,7 +104,24 @@ const PanelBuyer: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
+              {pastOrders && pastOrders.map((order) => (
+                <Tr>
+                  <Td>Call</Td>
+                  <Td>WETH</Td>
+                  <Td>USDC 5000</Td>
+                  <Td>Fri, 31 Dec 2021</Td>
+                  <Td isNumeric>0.5</Td>
+                  <Td isNumeric>$100</Td>
+                  <Td textAlign="right">
+                    <Link href="https://chakra-ui.com" isExternal>
+                      <Flex as="u">
+                        <Text mr="2">Redeemed</Text> <BiLinkExternal/>
+                      </Flex>
+                    </Link>
+                  </Td>
+                </Tr>
+              ))}
+              {/* <Tr>
                 <Td>Call</Td>
                 <Td>WETH</Td>
                 <Td>USDC 5000</Td>
@@ -110,7 +144,7 @@ const PanelBuyer: React.FC = () => {
                 <Td isNumeric>0.5</Td>
                 <Td isNumeric>$0</Td>
                 <Td textAlign="right">Not Profitable</Td>
-              </Tr>
+              </Tr> */}
             </Tbody>
           </Table>
 
