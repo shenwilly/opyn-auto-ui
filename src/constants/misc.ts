@@ -1,1 +1,3 @@
 export const DEFAULT_INTERVAL = 10000;
+
+export const STRIKE_PRICE_DECIMALS = 8;
