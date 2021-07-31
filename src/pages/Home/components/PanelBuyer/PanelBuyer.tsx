@@ -42,7 +42,7 @@ const PanelBuyer: React.FC = () => {
             </Thead>
             <Tbody>
               {balances && balances.map((otoken) => (
-                <Tr>
+                <Tr key={otoken.token.symbol}>
                   <Td>Call</Td>
                   <Td>WETH</Td>
                   <Td>USDC 5000</Td>
@@ -105,7 +105,7 @@ const PanelBuyer: React.FC = () => {
             </Thead>
             <Tbody>
               {pastOrders && pastOrders.map((order) => (
-                <Tr>
+                <Tr key={order.orderId}>
                   <Td>Call</Td>
                   <Td>WETH</Td>
                   <Td>USDC 5000</Td>

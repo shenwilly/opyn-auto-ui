@@ -38,7 +38,7 @@ const PanelSeller: React.FC = () => {
             </Thead>
             <Tbody>
               {vaults && vaults.map((vault) => (
-                <Tr>
+                <Tr key={vault.vaultId}>
                   <Td>WETH 0.1</Td>
                   <Td>-</Td>
                   <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
@@ -81,7 +81,7 @@ const PanelSeller: React.FC = () => {
             </Thead>
             <Tbody>
               {pastOrders && pastOrders.map((order) => (
-                <Tr>
+                <Tr key={order.orderId}>
                   <Td>WETH 0.1</Td>
                   <Td>-</Td>
                   <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
