@@ -56,4 +56,5 @@ export type SubgraphOrder = {
   isSeller: boolean
   toEth: boolean
   finished: boolean
+  finishTxHash: string
 }

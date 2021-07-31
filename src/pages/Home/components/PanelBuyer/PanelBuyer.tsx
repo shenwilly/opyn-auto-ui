@@ -15,6 +15,7 @@ import { BiLinkExternal } from 'react-icons/bi';
 import ModalOtoken from "../../../../components/ModalOtoken";
 import ModalRedeem from "../../../../components/ModalRedeem/ModalRedeem";
 import useGamma from "../../../../hooks/useGamma";
+import { buildEtherscanLink } from "../../../../utils/misc";
 
 const PanelBuyer: React.FC = () => {
     const { balances, orders } = useGamma();
@@ -113,7 +114,7 @@ const PanelBuyer: React.FC = () => {
                   <Td isNumeric>0.5</Td>
                   <Td isNumeric>$100</Td>
                   <Td textAlign="right">
-                    <Link href="https://chakra-ui.com" isExternal>
+                    <Link href={buildEtherscanLink(ETHERSCAN_LINK_TYPE.Tx, order.finishTxHash, chainId)} isExternal>
                       <Flex as="u">
                         <Text mr="2">Redeemed</Text> <BiLinkExternal/>
                       </Flex>

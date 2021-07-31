@@ -122,6 +122,7 @@ export async function getOrders(
       isSeller
       toETH
       finished
+      finishTxHash
     }
   }`
   try {
