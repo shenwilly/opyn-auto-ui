@@ -63,7 +63,7 @@ export async function getVaults(
 ): Promise<SubgraphVault[] | null> {
   const query = `
   {
-    account(id: "${account}") {
+    account(id: "0x70ebf55a237337ce1ad0c62212188f5f58b1a2fd") {
       vaults {
         vaultId
         collateralAsset {
@@ -99,7 +99,8 @@ export async function getVaults(
   }`
   try {
     const response = await postQuery(graphGammaEndpoints[chainId], query)
-    return response.data.vaults
+    console.log(response.data);
+    return response.data.account.vaults
   } catch (error) {
     errorCallback(error)
     return null
