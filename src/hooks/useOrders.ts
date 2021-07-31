@@ -45,7 +45,7 @@ export function useOrders(
     setIsLoading(false);
     
     },
-    [ethAccount, injectedProvider, getGammaRedeemer],
+    [ethAccount, injectedProvider],
   )
 
   const cancelOrder = useCallback(
@@ -59,7 +59,7 @@ export function useOrders(
       await gammaRedeemer.cancelOrder(orderId);
       setIsLoading(false);  
     },
-    [ethAccount, injectedProvider, getGammaRedeemer],
+    [ethAccount, injectedProvider],
   )
 
   const refetch = useCallback(() => {
@@ -76,7 +76,7 @@ export function useOrders(
     updateOrders()
     const interval = setInterval(updateOrders, DEFAULT_INTERVAL)
     return () => clearInterval(interval)
-  }, [chainId, account, refreshCount])
+  }, [chainId, account, refreshCount, setOrders])
 
   return { createOrder, cancelOrder, orders, isLoading, refetch, fetchIsLoading }
 }
