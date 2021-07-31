@@ -126,7 +126,7 @@ export async function getOrders(
   }`
   try {
     const response = await postQuery(graphAutoRedeemEndpoint[chainId], query)
-    return response.data.vaults
+    return response.data.orders
   } catch (error) {
     errorCallback(error)
     return null

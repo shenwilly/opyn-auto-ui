@@ -23,7 +23,7 @@ const PanelBuyer: React.FC = () => {
     const useDetailModal = useDisclosure();
     // const [oToken, setOToken] = useState();
 
-    const pastOrders = orders?.filter((order) => order.finished) ?? [];
+    const pastOrders = orders?.filter((order) => order.finished && !order.isSeller) ?? [];
 
     return (
         <>

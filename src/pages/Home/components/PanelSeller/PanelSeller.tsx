@@ -21,7 +21,7 @@ const PanelSeller: React.FC = () => {
     const useSettleModal = useDisclosure();
     const useVaultModal = useDisclosure();
 
-    const pastOrders = orders?.filter((order) => order.finished) ?? [];
+    const pastOrders = orders?.filter((order) => order.finished && order.isSeller) ?? [];
 
     return (
         <>
