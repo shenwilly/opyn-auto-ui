@@ -99,7 +99,6 @@ export async function getVaults(
   }`
   try {
     const response = await postQuery(graphGammaEndpoints[chainId], query)
-    console.log(response.data);
     return response.data.account.vaults
   } catch (error) {
     errorCallback(error)
