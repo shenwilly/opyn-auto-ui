@@ -30,12 +30,16 @@ const PanelBuyer: React.FC = () => {
     const useRedeemModal = useDisclosure();
     const useDetailModal = useDisclosure();
 
+    const redeemOrders = useMemo(() => {
+      return orders?.filter((order) => !order.isSeller) ?? [];
+    }, [orders]) ;
+
     const activeOrders = useMemo(() => {
-      return orders?.filter((order) => !order.finished && !order.isSeller) ?? [];
+      return redeemOrders?.filter((order) => !order.finished && !order.isSeller) ?? [];
     }, [orders]) ;
 
     const pastOrders = useMemo(() => {
-      return orders?.filter((order) => order.finished && !order.isSeller) ?? [];
+      return redeemOrders?.filter((order) => order.finished && !order.isSeller) ?? [];
     }, [orders]) ;
 
     const hasActiveOrder = (otokenAddress: string): boolean => {
@@ -78,7 +82,7 @@ const PanelBuyer: React.FC = () => {
             </Thead>
             <Tbody>
               {balances && balances.map((otoken) => (
-                <Tr key={otoken.token.symbol}>
+                <Tr key={otoken.token.id}>
                   <Td>
                     {otoken.token.isPut
                       ? 'Put'
@@ -158,6 +162,7 @@ const PanelBuyer: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
+              {/* TODO: fetch otoken details from otoke ids */}
               {pastOrders && pastOrders.map((order) => (
                 <Tr key={order.orderId}>
                   <Td>Call</Td>
