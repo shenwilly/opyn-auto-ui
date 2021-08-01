@@ -11,17 +11,41 @@ import {
   Link,
   useDisclosure
 } from "@chakra-ui/react"
+import { formatUnits } from "ethers/lib/utils";
+import { useMemo } from "react";
 import { BiLinkExternal } from 'react-icons/bi';
 import ModalSettle from "../../../../components/ModalSettle";
 import ModalVault from "../../../../components/ModalVault";
 import useGamma from "../../../../hooks/useGamma";
+import { SubgraphVault } from "../../../../types";
 
 const PanelSeller: React.FC = () => {
     const { vaults, orders } = useGamma();
     const useSettleModal = useDisclosure();
     const useVaultModal = useDisclosure();
 
-    const pastOrders = orders?.filter((order) => order.finished && order.isSeller) ?? [];
+    const settleOrders = useMemo(() => {
+      return orders?.filter((order) => order.isSeller) ?? [];
+    }, [orders]) ;
+
+    const activeOrders = useMemo(() => {
+      return settleOrders?.filter((order) => !order.finished && order.isSeller) ?? [];
+    }, [settleOrders]) ;
+
+    const pastOrders = useMemo(() => {
+      return settleOrders?.filter((order) => order.finished && order.isSeller) ?? [];
+    }, [settleOrders]) ;
+
+    const hasActiveOrder = (vaultId: string): boolean => {
+      const activeOrder = activeOrders?.find((order) => order.vaultId === vaultId);
+      return activeOrder !== undefined;
+    }
+
+    const getStatus = (vault: SubgraphVault) => {
+      // check short otoken, else long otoken
+      // check expiry
+      return "-"
+    }
 
     return (
         <>
@@ -39,12 +63,33 @@ const PanelSeller: React.FC = () => {
             <Tbody>
               {vaults && vaults.map((vault) => (
                 <Tr key={vault.vaultId}>
-                  <Td>WETH 0.1</Td>
-                  <Td>-</Td>
-                  <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
-                  <Td textAlign="center">-</Td>
                   <Td>
-                    <Button w="100%" colorScheme="green" onClick={useSettleModal.onOpen}>Auto Settle</Button>
+                    {vault.collateralAsset !== null && vault.collateralAmount !== null 
+                      ? `${vault.collateralAsset?.symbol} ${formatUnits(vault.collateralAmount, vault.collateralAsset?.decimals)}`
+                      : '-'
+                    }
+                  </Td>
+                  <Td>
+                    {vault.longAmount !== null && vault.longOToken !== null 
+                      ? `${vault.longAmount} ${vault.longOToken?.symbol}`
+                      : '-'
+                    }
+                  </Td>
+                  <Td>
+                    {vault.shortAmount !== null && vault.shortOToken !== null 
+                      ? `${vault.shortAmount} ${vault.shortOToken?.symbol}`
+                      : '-'
+                    }
+                    {/* 0.1 oWETHUSDC/WETH-30JUL21-2200C */}
+                  </Td>
+                  <Td textAlign="center">
+                    {getStatus(vault)}
+                  </Td>
+                  <Td>
+                    {hasActiveOrder(vault.vaultId)
+                      ? <Button w="100%" colorScheme="blue" onClick={useVaultModal.onOpen}>Details</Button>
+                      : <Button w="100%" colorScheme="green" onClick={useSettleModal.onOpen}>Auto Settle</Button>
+                    }
                   </Td>
                 </Tr>
               ))}
