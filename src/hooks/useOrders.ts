@@ -29,9 +29,9 @@ export function useOrders(
   const [fetchIsLoading, setFetchIsLoading] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
-  const getGammaRedeemer = (): GammaRedeemer => {
+  const getGammaRedeemer = useCallback((): GammaRedeemer => {
     return (new ethers.Contract(GAMMA_REDEEMER_ADDRESS[chainId], GammaRedeemerAbi, ethAccount)) as GammaRedeemer;
-  }
+  }, [chainId, ethAccount]);
 
   const createOrder = useCallback(
     async (otoken: string, amount: BigNumber, vaultId: BigNumber) => {
@@ -45,7 +45,7 @@ export function useOrders(
     setIsLoading(false);
     
     },
-    [ethAccount, injectedProvider],
+    [ethAccount, injectedProvider, getGammaRedeemer],
   )
 
   const cancelOrder = useCallback(
@@ -59,7 +59,7 @@ export function useOrders(
       await gammaRedeemer.cancelOrder(orderId);
       setIsLoading(false);  
     },
-    [ethAccount, injectedProvider],
+    [ethAccount, injectedProvider, getGammaRedeemer],
   )
 
   const refetch = useCallback(() => {
