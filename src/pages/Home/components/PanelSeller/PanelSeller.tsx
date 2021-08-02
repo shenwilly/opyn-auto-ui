@@ -25,7 +25,7 @@ const PanelSeller: React.FC = () => {
     const useVaultModal = useDisclosure();
     const [selectedVault, setSelectedVault] = useState<SubgraphVault>();
     const [selectedOrder, setSelectedOrder] = useState<SubgraphOrder>();
-
+  
     const settleOrders = useMemo(() => {
       return orders?.filter((order) => order.isSeller) ?? [];
     }, [orders]) ;

@@ -1,6 +1,6 @@
 import { 
   Modal, ModalContent, ModalOverlay, ModalHeader, ModalBody, 
-  Image, Button, Text, HStack, ModalCloseButton, useToast
+  Button, Text, ModalCloseButton, useToast
 } from "@chakra-ui/react"
 import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
@@ -23,7 +23,8 @@ interface ModalProps {
 const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
   const { accountAddress, chainId } = useEthereum();
   const { refetchVaults } = useGamma();
-  const { setOperator, isLoading:setIsLoading, isOperator, fetchIsLoading } = useOperator(GAMMA_CONTROLLER_ADDRESS[chainId], chainId);
+  const { setOperator, isLoading:setIsLoading, 
+    isOperator, fetchIsLoading, refetch:refetchIsOperator } = useOperator(GAMMA_CONTROLLER_ADDRESS[chainId], chainId);
   const { createOrder, isLoading:createIsLoading } = useOrders(accountAddress, chainId);
   const otoken = getVaultOtoken(vault);
   const toast = useToast();
@@ -34,6 +35,7 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
   
   const handleSetOperator = async () => {
     await setOperator(true);
+    refetchIsOperator();
   }
 
   const handleCreate = async () => {
