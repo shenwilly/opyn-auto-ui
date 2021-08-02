@@ -12,19 +12,22 @@ import {
   Flex,
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers/lib/utils";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { BiLinkExternal } from 'react-icons/bi';
 import ModalOtoken from "../../../../components/ModalOtoken";
 import ModalRedeem from "../../../../components/ModalRedeem/ModalRedeem";
 import { ETHERSCAN_LINK_TYPE, STRIKE_PRICE_DECIMALS } from "../../../../constants";
 import useEthereum from "../../../../hooks/useEthereum";
 import useGamma from "../../../../hooks/useGamma";
-import { SubgraphOToken } from "../../../../types";
+import { OTokenBalance, SubgraphOrder, SubgraphOToken } from "../../../../types";
+import { dateFormat } from "../../../../utils/date";
 import { buildEtherscanLink } from "../../../../utils/misc";
 
 const PanelBuyer: React.FC = () => {
     const { balances, orders } = useGamma();
     const { chainId } = useEthereum();
+    const [selectedOtoken, setSelectedOtoken] = useState<OTokenBalance>();
+    const [selectedOrder, setSelectedOrder] = useState<SubgraphOrder>();
     
     const useRedeemModal = useDisclosure();
     const useDetailModal = useDisclosure();
@@ -35,11 +38,11 @@ const PanelBuyer: React.FC = () => {
 
     const activeOrders = useMemo(() => {
       return redeemOrders?.filter((order) => !order.finished && !order.isSeller) ?? [];
-    }, [orders]) ;
+    }, [redeemOrders]) ;
 
     const pastOrders = useMemo(() => {
       return redeemOrders?.filter((order) => order.finished && !order.isSeller) ?? [];
-    }, [orders]) ;
+    }, [redeemOrders]) ;
 
     const hasActiveOrder = (otokenAddress: string): boolean => {
       const activeOrder = activeOrders?.find((order) => order.otoken === otokenAddress);
@@ -62,6 +65,16 @@ const PanelBuyer: React.FC = () => {
       }
 
       return status
+    }
+
+    const handleClickDetails = (otoken: OTokenBalance) => {
+      setSelectedOtoken(otoken);
+      useDetailModal.onOpen();
+    }
+
+    const handleClickSetAutoRedeem = (otoken: OTokenBalance) => {
+      setSelectedOtoken(otoken);
+      useRedeemModal.onOpen();
     }
 
     return (
@@ -105,8 +118,8 @@ const PanelBuyer: React.FC = () => {
                   </Td>
                   <Td>
                     {hasActiveOrder(otoken.token.id)
-                      ? <Button w="100%" colorScheme="blue" onClick={useDetailModal.onOpen}>Details</Button>
-                      : <Button w="100%" colorScheme="green" onClick={useRedeemModal.onOpen}>Auto Redeem</Button> 
+                      ? <Button w="100%" colorScheme="blue" onClick={() => handleClickDetails(otoken)}>Details</Button>
+                      : <Button w="100%" colorScheme="green" onClick={() => handleClickSetAutoRedeem(otoken)}>Auto Redeem</Button> 
                     }
                   </Td>
                 </Tr>
@@ -206,8 +219,8 @@ const PanelBuyer: React.FC = () => {
             </Tbody>
           </Table>
 
-          <ModalRedeem isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>
-          <ModalOtoken isOpen={useDetailModal.isOpen} onClose={useDetailModal.onClose}/>
+          {selectedOtoken && <ModalRedeem otoken={selectedOtoken!} isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>}
+          {selectedOtoken && <ModalOtoken otoken={selectedOtoken!} isOpen={useDetailModal.isOpen} onClose={useDetailModal.onClose}/>}
         </>
     );
 };
