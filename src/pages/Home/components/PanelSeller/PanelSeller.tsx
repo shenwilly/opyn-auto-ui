@@ -157,7 +157,7 @@ const PanelSeller: React.FC = () => {
             </Tbody>
           </Table>
 
-          <Text my="4">Order History</Text>
+          {/* <Text my="4">Order History</Text>
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -182,7 +182,7 @@ const PanelSeller: React.FC = () => {
                   </Td>
                 </Tr>
               ))}
-              {/* <Tr>
+              <Tr>
                 <Td>WETH 0.1</Td>
                 <Td>-</Td>
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
@@ -193,9 +193,9 @@ const PanelSeller: React.FC = () => {
                       </Flex>
                     </Link>
                 </Td>
-              </Tr> */}
+              </Tr>
             </Tbody>
-          </Table>
+          </Table> */}
               
           {selectedVault && 
             <ModalSettle vault={selectedVault} isOpen={useSettleModal.isOpen} onClose={useSettleModal.onClose}/>}

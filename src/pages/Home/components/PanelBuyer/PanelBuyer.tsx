@@ -172,7 +172,8 @@ const PanelBuyer: React.FC = () => {
             </Tbody>
           </Table>
 
-          <Text my="4">Order History</Text>
+          {/* TODO: fetch otoken details from otoke ids */}
+          {/* <Text my="4">Order History</Text>
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -186,7 +187,6 @@ const PanelBuyer: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {/* TODO: fetch otoken details from otoke ids */}
               {pastOrders && pastOrders.map((order) => (
                 <Tr key={order.orderId}>
                   <Td>Call</Td>
@@ -204,7 +204,7 @@ const PanelBuyer: React.FC = () => {
                   </Td>
                 </Tr>
               ))}
-              {/* <Tr>
+              <Tr>
                 <Td>Call</Td>
                 <Td>WETH</Td>
                 <Td>USDC 5000</Td>
@@ -227,9 +227,9 @@ const PanelBuyer: React.FC = () => {
                 <Td isNumeric>0.5</Td>
                 <Td isNumeric>$0</Td>
                 <Td textAlign="right">Not Profitable</Td>
-              </Tr> */}
+              </Tr>
             </Tbody>
-          </Table>
+          </Table> */}
 
           {selectedOtoken && 
             <ModalRedeem otoken={selectedOtoken} isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>}
