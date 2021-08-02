@@ -1,4 +1,4 @@
-import { Container, Flex, Spacer, Text, Button } from "@chakra-ui/react"
+import { Container, Flex, Spacer, Text } from "@chakra-ui/react"
 import styled from "styled-components";
 import Web3Account from "../Web3Account";
 

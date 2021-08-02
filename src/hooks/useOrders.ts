@@ -11,7 +11,7 @@ import useEthereum from './useEthereum'
 
 interface useOrdersResult {
   createOrder: (otoken: string, amount: BigNumber, vaultId: BigNumberish) => Promise<void>; 
-  cancelOrder: (orderId: BigNumber) => {};
+  cancelOrder: (orderId: BigNumber) => Promise<void>;
   orders: SubgraphOrder[] | null; 
   refetch: Function; 
   isLoading: boolean;

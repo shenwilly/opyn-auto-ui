@@ -49,6 +49,11 @@ const PanelBuyer: React.FC = () => {
       return activeOrder !== undefined;
     }
 
+    const getActiveOrder = (otokenAddress: string): SubgraphOrder | null => {
+      const activeOrder = activeOrders?.find((order) => order.otoken === otokenAddress) ?? null;
+      return activeOrder;
+    }
+
     const getStatus = (otoken: SubgraphOToken): string => {
       let status= "";
 
@@ -69,7 +74,14 @@ const PanelBuyer: React.FC = () => {
 
     const handleClickDetails = (otoken: OTokenBalance) => {
       setSelectedOtoken(otoken);
-      useDetailModal.onOpen();
+
+      const order = getActiveOrder(otoken.token.id);
+      if (order) {
+        setSelectedOrder(order);
+        useDetailModal.onOpen();
+      } else {
+        useRedeemModal.onOpen();
+      }
     }
 
     const handleClickSetAutoRedeem = (otoken: OTokenBalance) => {
@@ -219,8 +231,11 @@ const PanelBuyer: React.FC = () => {
             </Tbody>
           </Table>
 
-          {selectedOtoken && <ModalRedeem otoken={selectedOtoken!} isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>}
-          {selectedOtoken && <ModalOtoken otoken={selectedOtoken!} isOpen={useDetailModal.isOpen} onClose={useDetailModal.onClose}/>}
+          {selectedOtoken && 
+            <ModalRedeem otoken={selectedOtoken!} isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>}
+          {selectedOtoken && 
+            <ModalOtoken otoken={selectedOtoken!} order={selectedOrder!} 
+            isOpen={useDetailModal.isOpen} onClose={useDetailModal.onClose}/>}
         </>
     );
 };

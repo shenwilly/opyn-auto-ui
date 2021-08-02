@@ -49,7 +49,7 @@ export function useAllowance(token: string, spender: string) {
     updateBalances()
     const interval = setInterval(updateBalances, DEFAULT_INTERVAL)
     return () => clearInterval(interval)
-  }, [ethAccount, token, accountAddress, refreshAllowanceCount])
+  }, [ethAccount, token, accountAddress, refreshAllowanceCount, spender])
 
   return { approve, approveIsLoading, allowance, allowanceIsLoading, refetchAllowance }
 }

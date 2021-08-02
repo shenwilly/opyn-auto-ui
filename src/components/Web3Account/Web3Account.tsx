@@ -1,11 +1,6 @@
-import { useCallback } from "react";
 import { Button, Box, Flex, Text, useDisclosure } from "@chakra-ui/react"
-// import useWeb3 from "../../hooks/useWeb3";
 import Web3AccountModal from "../Web3AccountModal";
-// import useUbiroll from "../../hooks/useUbiroll";
-// import { formatUnits } from "ethers/lib/utils";
 import useEthereum from "../../hooks/useEthereum";
-// import UbiModal from "../UbiModal";
 
 const Web3Account = () => {
     const { web3Modal, loadWeb3Modal, logoutOfWeb3Modal, injectedProvider, accountAddress } = useEthereum()
