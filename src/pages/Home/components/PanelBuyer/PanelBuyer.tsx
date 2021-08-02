@@ -21,7 +21,6 @@ import useEthereum from "../../../../hooks/useEthereum";
 import useGamma from "../../../../hooks/useGamma";
 import { SubgraphOToken } from "../../../../types";
 import { buildEtherscanLink } from "../../../../utils/misc";
-import { format as dateFormat } from 'date-fns'
 
 const PanelBuyer: React.FC = () => {
     const { balances, orders } = useGamma();
@@ -96,7 +95,7 @@ const PanelBuyer: React.FC = () => {
                     {otoken.token.strikeAsset.symbol} {formatUnits(otoken.token.strikePrice, STRIKE_PRICE_DECIMALS)}
                   </Td>
                   <Td>
-                    {dateFormat(parseInt(otoken.token.expiryTimestamp) * 1000, 'E, d LLL y')}
+                    {dateFormat(parseInt(otoken.token.expiryTimestamp) * 1000)}
                   </Td>
                   <Td isNumeric>
                     {formatUnits(otoken.balance.toString(), otoken.token.decimals)}
