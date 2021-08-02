@@ -2,6 +2,7 @@ import {
   Modal, ModalContent, ModalOverlay, ModalHeader, ModalBody, 
   Button, Text, ModalCloseButton, useToast
 } from "@chakra-ui/react"
+import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { useMemo } from "react";
 import { GAMMA_REDEEMER_ADDRESS } from "../../constants/address";
@@ -38,7 +39,7 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
   }
 
   const handleCreate = async () => {
-    await createOrder(otoken.token.id, otoken.balance, 0);
+    await createOrder(otoken.token.id, otoken.balance, BigNumber.from(0));
     refetchOrders();
     toast({
       title: "Redeem order created.",

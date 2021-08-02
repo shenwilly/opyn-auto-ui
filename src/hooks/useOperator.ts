@@ -23,10 +23,11 @@ export function useOperator(operator: string, chainId: CHAIN_ID) {
         new ethers.Contract(GAMMA_CONTROLLER_ADDRESS[chainId], ControllerAbi, ethAccount)
       ) as GammaController;
 
-      await controller.setOperator(operator, value);
+      const tx = await controller.setOperator(operator, value);
+      await tx.wait();
       setIsLoading(false);
     },
-    [ethAccount, injectedProvider, operator],
+    [ethAccount, injectedProvider, operator, chainId],
   )
 
   const refetch = useCallback(() => {
@@ -46,7 +47,7 @@ export function useOperator(operator: string, chainId: CHAIN_ID) {
     updateIsOperator()
     const interval = setInterval(updateIsOperator, DEFAULT_INTERVAL)
     return () => clearInterval(interval)
-  }, [ethAccount, accountAddress, refreshCount])
+  }, [ethAccount, accountAddress, refreshCount, chainId, operator])
 
   return { setOperator, isLoading, isOperator, refetch, fetchIsLoading }
 }

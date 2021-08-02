@@ -232,9 +232,9 @@ const PanelBuyer: React.FC = () => {
           </Table>
 
           {selectedOtoken && 
-            <ModalRedeem otoken={selectedOtoken!} isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>}
+            <ModalRedeem otoken={selectedOtoken} isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>}
           {selectedOtoken && 
-            <ModalOtoken otoken={selectedOtoken!} order={selectedOrder!} 
+            <ModalOtoken otoken={selectedOtoken} order={selectedOrder!} 
             isOpen={useDetailModal.isOpen} onClose={useDetailModal.onClose}/>}
         </>
     );

@@ -63,7 +63,7 @@ export async function getVaults(
 ): Promise<SubgraphVault[] | null> {
   const query = `
   {
-    account(id: "0x70ebf55a237337ce1ad0c62212188f5f58b1a2fd") {
+    account(id: "${account}") {
       vaults {
         vaultId
         collateralAsset {
