@@ -1,14 +1,17 @@
 import { 
   Modal, ModalContent, ModalOverlay, ModalHeader, ModalBody, 
-  Image, Button, Text, HStack, ModalCloseButton
+  Button, Text, ModalCloseButton
 } from "@chakra-ui/react"
+import { SubgraphOrder, SubgraphVault } from "../../types";
 
 interface ModalProps {
+  vault: SubgraphVault;
+  order: SubgraphOrder;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ModalVault: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const ModalVault: React.FC<ModalProps> = ({ vault, order, isOpen, onClose }) => {
   return (
       <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

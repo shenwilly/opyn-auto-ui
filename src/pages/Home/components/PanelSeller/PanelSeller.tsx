@@ -12,17 +12,19 @@ import {
   useDisclosure
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers/lib/utils";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { BiLinkExternal } from 'react-icons/bi';
 import ModalSettle from "../../../../components/ModalSettle";
 import ModalVault from "../../../../components/ModalVault";
 import useGamma from "../../../../hooks/useGamma";
-import { SubgraphVault } from "../../../../types";
+import { SubgraphOrder, SubgraphVault } from "../../../../types";
 
 const PanelSeller: React.FC = () => {
     const { vaults, orders } = useGamma();
     const useSettleModal = useDisclosure();
     const useVaultModal = useDisclosure();
+    const [selectedVault, setSelectedVault] = useState<SubgraphVault>();
+    const [selectedOrder, setSelectedOrder] = useState<SubgraphOrder>();
 
     const settleOrders = useMemo(() => {
       return orders?.filter((order) => order.isSeller) ?? [];
@@ -41,10 +43,51 @@ const PanelSeller: React.FC = () => {
       return activeOrder !== undefined;
     }
 
+    const getActiveOrder = (vaultId: string): SubgraphOrder | null => {
+      const activeOrder = activeOrders?.find((order) => order.vaultId === vaultId) ?? null;
+      return activeOrder;
+    }
+
     const getStatus = (vault: SubgraphVault) => {
-      // check short otoken, else long otoken
-      // check expiry
-      return "-"
+      let status = ""
+      
+      if (vault.longOToken === null && vault.shortOToken === null) {
+        return "Redeemable"
+      } else if (vault.shortOToken !== null) {
+        const otoken = vault.shortOToken;
+        const timestamp = Math.round(Date.now() / 1000);
+        if (timestamp > parseInt(otoken.expiryTimestamp)) {
+          status = "Waiting settlement"
+        } else {
+          status = "Waiting expiry"
+        }
+      } else if (vault.longOToken !== null) {
+        const otoken = vault.longOToken;
+        const timestamp = Math.round(Date.now() / 1000);
+        if (timestamp > parseInt(otoken.expiryTimestamp)) {
+          status = "Waiting settlement"
+        } else {
+          status = "Waiting expiry"
+        }
+      }
+      return status;
+    }
+
+    const handleClickDetails = (vault: SubgraphVault) => {
+      setSelectedVault(vault);
+
+      const order = getActiveOrder(vault.vaultId);
+      if (order) {
+        setSelectedOrder(order);
+        useVaultModal.onOpen();
+      } else {
+        useSettleModal.onOpen();
+      }
+    }
+
+    const handleClickSettle = (vault: SubgraphVault) => {
+      setSelectedVault(vault);
+      useSettleModal.onOpen();
     }
 
     return (
@@ -71,13 +114,13 @@ const PanelSeller: React.FC = () => {
                   </Td>
                   <Td>
                     {vault.longAmount !== null && vault.longOToken !== null 
-                      ? `${vault.longAmount} ${vault.longOToken?.symbol}`
+                      ? `${formatUnits(vault.longAmount, vault.longOToken.decimals)} ${vault.longOToken?.symbol}`
                       : '-'
                     }
                   </Td>
                   <Td>
                     {vault.shortAmount !== null && vault.shortOToken !== null 
-                      ? `${vault.shortAmount} ${vault.shortOToken?.symbol}`
+                      ? `${formatUnits(vault.shortAmount, vault.shortOToken.decimals)} ${vault.shortOToken?.symbol}`
                       : '-'
                     }
                     {/* 0.1 oWETHUSDC/WETH-30JUL21-2200C */}
@@ -87,8 +130,8 @@ const PanelSeller: React.FC = () => {
                   </Td>
                   <Td>
                     {hasActiveOrder(vault.vaultId)
-                      ? <Button w="100%" colorScheme="blue" onClick={useVaultModal.onOpen}>Details</Button>
-                      : <Button w="100%" colorScheme="green" onClick={useSettleModal.onOpen}>Auto Settle</Button>
+                      ? <Button w="100%" colorScheme="blue" onClick={() => handleClickDetails(vault)}>Details</Button>
+                      : <Button w="100%" colorScheme="green" onClick={() => handleClickSettle(vault)}>Auto Settle</Button>
                     }
                   </Td>
                 </Tr>
@@ -153,9 +196,12 @@ const PanelSeller: React.FC = () => {
               </Tr> */}
             </Tbody>
           </Table>
-
-          <ModalSettle isOpen={useSettleModal.isOpen} onClose={useSettleModal.onClose}/>
-          <ModalVault isOpen={useVaultModal.isOpen} onClose={useVaultModal.onClose}/>
+              
+          {selectedVault && 
+            <ModalSettle vault={selectedVault} isOpen={useSettleModal.isOpen} onClose={useSettleModal.onClose}/>}
+          {selectedVault && selectedOrder &&
+            <ModalVault vault={selectedVault} order={selectedOrder} 
+              isOpen={useVaultModal.isOpen} onClose={useVaultModal.onClose}/>}
         </>
     );
 };
