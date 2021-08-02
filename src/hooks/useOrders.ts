@@ -10,7 +10,7 @@ import { GAMMA_REDEEMER_ADDRESS } from '../constants/address'
 import useEthereum from './useEthereum'
 
 interface useOrdersResult {
-  createOrder: (otoken: string, amount: BigNumber, vaultId: BigNumberish) => {}; 
+  createOrder: (otoken: string, amount: BigNumber, vaultId: BigNumberish) => Promise<void>; 
   cancelOrder: (orderId: BigNumber) => {};
   orders: SubgraphOrder[] | null; 
   refetch: Function; 
@@ -41,7 +41,8 @@ export function useOrders(
   
     setIsLoading(true);
     const gammaRedeemer = getGammaRedeemer();
-    await gammaRedeemer.createOrder(otoken, amount, vaultId);
+    const tx = await gammaRedeemer.createOrder(otoken, amount, vaultId);
+    await tx.wait();
     setIsLoading(false);
     
     },
@@ -56,7 +57,8 @@ export function useOrders(
     
       setIsLoading(true);
       const gammaRedeemer = getGammaRedeemer();
-      await gammaRedeemer.cancelOrder(orderId);
+      const tx = await gammaRedeemer.cancelOrder(orderId);
+      await tx.wait();
       setIsLoading(false);  
     },
     [ethAccount, injectedProvider, getGammaRedeemer],
