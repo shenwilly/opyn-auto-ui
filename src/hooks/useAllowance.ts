@@ -23,7 +23,8 @@ export function useAllowance(token: string, spender: string) {
     setApproveIsLoading(true);
     try {
       const erc20 = (new ethers.Contract(token, ERC20abi, ethAccount)) as ERC20;
-      await erc20.approve(spender, approveAmount);
+      const tx = await erc20.approve(spender, approveAmount);
+      await tx.wait();
       setApproveIsLoading(false);
     } catch (e) {
       setApproveIsLoading(false);
@@ -40,7 +41,7 @@ export function useAllowance(token: string, spender: string) {
   useEffect(() => {
     async function updateBalances() {
       const erc20 = (new ethers.Contract(token, ERC20abi, ethAccount)) as ERC20;
-      const balances = await erc20.balanceOf(accountAddress);
+      const balances = await erc20.allowance(accountAddress, spender);
       
       setAllowanceIsLoading(false);
       setAllowance(balances);

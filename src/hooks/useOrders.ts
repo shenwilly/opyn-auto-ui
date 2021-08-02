@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber, BigNumberish, ethers } from 'ethers'
 import { useState, useCallback, useEffect } from 'react'
 import { SubgraphOrder } from '../types'
 import { getOrders } from '../utils/graph'
@@ -10,8 +10,8 @@ import { GAMMA_REDEEMER_ADDRESS } from '../constants/address'
 import useEthereum from './useEthereum'
 
 interface useOrdersResult {
-  createOrder: Function; 
-  cancelOrder: Function;
+  createOrder: (otoken: string, amount: BigNumber, vaultId: BigNumberish) => {}; 
+  cancelOrder: (orderId: BigNumber) => {};
   orders: SubgraphOrder[] | null; 
   refetch: Function; 
   isLoading: boolean;
@@ -34,7 +34,7 @@ export function useOrders(
   }, [chainId, ethAccount]);
 
   const createOrder = useCallback(
-    async (otoken: string, amount: BigNumber, vaultId: BigNumber) => {
+    async (otoken: string, amount: BigNumber, vaultId: BigNumberish) => {
     if (!ethAccount || !injectedProvider || otoken === "") {
       return;
     }
