@@ -1,20 +1,41 @@
 import { 
   Modal, ModalContent, ModalOverlay, ModalHeader, ModalBody, 
-  Image, Button, Text, HStack, ModalCloseButton
+  Button, Text, ModalCloseButton, useToast
 } from "@chakra-ui/react"
+import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { STRIKE_PRICE_DECIMALS } from "../../constants";
-import { OTokenBalance } from "../../types";
+import useEthereum from "../../hooks/useEthereum";
+import useGamma from "../../hooks/useGamma";
+import { useOrders } from "../../hooks/useOrders";
+import { OTokenBalance, SubgraphOrder } from "../../types";
 import { dateFormat } from "../../utils/date";
-
 
 interface ModalProps {
   otoken: OTokenBalance;
+  order: SubgraphOrder;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ModalOtoken: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
+const ModalOtoken: React.FC<ModalProps> = ({ otoken, order, isOpen, onClose }) => {
+  const { accountAddress, chainId } = useEthereum();
+  const { refetchOrders } = useGamma();
+  const { cancelOrder, isLoading } = useOrders(accountAddress, chainId);
+  const toast = useToast();
+  
+  const handleCancel = async () => {
+    await cancelOrder(BigNumber.from(order.orderId));
+    refetchOrders();
+    toast({
+      title: "Order cancelled.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    })
+    onClose();
+  }
+
   return (
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -27,7 +48,7 @@ const ModalOtoken: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
           <ModalCloseButton />
           <ModalBody>
             <Text>
-              {otoken.token.underlyingAsset.symbol}
+              Asset: {otoken.token.underlyingAsset.symbol}
             </Text>
             
             <Text>
@@ -42,7 +63,10 @@ const ModalOtoken: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
               Expiry: {dateFormat(parseInt(otoken.token.expiryTimestamp) * 1000)}
             </Text>
 
-            <Button w="100%" colorScheme="orange" mt={5} mb={3}>Cancel</Button>
+            <Button w="100%" colorScheme="orange" mt={5} mb={3}
+              isLoading={isLoading}
+              onClick={handleCancel}
+              >Cancel</Button>
           </ModalBody>
         </ModalContent>
       </Modal>

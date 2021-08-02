@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { GAMMA_REDEEMER_ADDRESS } from "../../constants/address";
 import { useAllowance } from "../../hooks/useAllowance";
 import useEthereum from "../../hooks/useEthereum";
+import useGamma from "../../hooks/useGamma";
 import { useOrders } from "../../hooks/useOrders";
 import { OTokenBalance } from "../../types";
 import { dateFormat } from "../../utils/date";
@@ -19,17 +20,18 @@ interface ModalProps {
 
 const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
   const { accountAddress, chainId } = useEthereum();
+  const { refetchOrders } = useGamma();
   const { allowance, allowanceIsLoading, approve, approveIsLoading } = useAllowance(otoken.token.id, GAMMA_REDEEMER_ADDRESS[chainId]);
-  const { createOrder } = useOrders(accountAddress, chainId);
+  const { createOrder, isLoading:createIsLoading } = useOrders(accountAddress, chainId);
   const toast = useToast();
 
   const isLoading = useMemo(() => {
-    return allowanceIsLoading || approveIsLoading;
-  }, [allowanceIsLoading, approveIsLoading])
+    return allowanceIsLoading || approveIsLoading || createIsLoading;
+  }, [allowanceIsLoading, approveIsLoading, createIsLoading])
 
   const isAllowanceEnough = useMemo(() => {
     return allowance.gte(otoken.balance);
-  }, [allowance])
+  }, [allowance, otoken.balance])
 
   const handleApprove = async () => {
     await approve();
@@ -37,6 +39,7 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
 
   const handleCreate = async () => {
     await createOrder(otoken.token.id, otoken.balance, 0);
+    refetchOrders();
     toast({
       title: "Redeem order created.",
       status: "success",
