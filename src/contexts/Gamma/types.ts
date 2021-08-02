@@ -5,6 +5,8 @@ export interface ContextValues {
   balancesIsLoading: boolean,
   vaults: SubgraphVault[] | null,
   vaultsIsLoading: boolean,
+  refetchVaults: Function,
   orders: SubgraphOrder[] | null,
   ordersIsLoading: boolean,
+  refetchOrders: Function,
 }

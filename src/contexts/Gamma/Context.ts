@@ -6,8 +6,10 @@ const Context = createContext<ContextValues>({
   balancesIsLoading: false,
   vaults: null,
   vaultsIsLoading: false,
+  refetchVaults: () => {},
   orders: null,
   ordersIsLoading: false,
+  refetchOrders: () => {},
 });
 
 export default Context;
