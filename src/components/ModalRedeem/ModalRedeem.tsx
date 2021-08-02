@@ -1,6 +1,6 @@
 import { 
   Modal, ModalContent, ModalOverlay, ModalHeader, ModalBody, 
-  Button, Text, ModalCloseButton
+  Button, Text, ModalCloseButton, useToast
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers/lib/utils";
 import { useMemo } from "react";
@@ -21,6 +21,7 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
   const { accountAddress, chainId } = useEthereum();
   const { allowance, allowanceIsLoading, approve, approveIsLoading } = useAllowance(otoken.token.id, GAMMA_REDEEMER_ADDRESS[chainId]);
   const { createOrder } = useOrders(accountAddress, chainId);
+  const toast = useToast();
 
   const isLoading = useMemo(() => {
     return allowanceIsLoading || approveIsLoading;
@@ -36,6 +37,13 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
 
   const handleCreate = async () => {
     await createOrder(otoken.token.id, otoken.balance, 0);
+    toast({
+      title: "Redeem order created.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    })
+    onClose();
   }
 
   return (
