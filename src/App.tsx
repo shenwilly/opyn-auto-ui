@@ -29,7 +29,7 @@ function App() {
           </Switch>
         </BodyWrapper>
       </SiteWrapper>
-      <ModalNetwork isOpen={chainId !== undefined && !(chainId in CHAIN_ID)} />
+      <ModalNetwork isOpen={chainId !== undefined && chainId !== CHAIN_ID.MAINNET} />
     </Router>
   );
 }
