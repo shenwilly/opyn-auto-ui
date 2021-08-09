@@ -2,7 +2,7 @@ import {
   Modal, ModalContent, ModalOverlay, ModalHeader, ModalBody, 
   Button, Text, ModalCloseButton, useToast
 } from "@chakra-ui/react"
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { useMemo } from "react";
 import { GAMMA_CONTROLLER_ADDRESS } from "../../constants/address";
@@ -39,7 +39,11 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
   }
 
   const handleCreate = async () => {
-    await createOrder(otoken!.id, BigNumber.from(0), BigNumber.from(vault.vaultId));
+    await createOrder(
+      ethers.constants.AddressZero, 
+      BigNumber.from(0), 
+      BigNumber.from(vault.vaultId)
+    );
     refetchVaults();
     toast({
       title: "Settle order created.",
