@@ -3,7 +3,6 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom"
 import { Container, ChakraProvider } from "@chakra-ui/react"
 import styled, { ThemeProvider } from "styled-components"
 
-import Home from "./pages/Home"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import chakraTheme from "./utils/chakraTheme"
@@ -12,6 +11,8 @@ import { GammaProvider } from "./contexts/Gamma"
 import ModalNetwork from "./components/ModalNetwork"
 import useEthereum from "./hooks/useEthereum"
 import { CHAIN_ID } from "./constants"
+import Redeem from "./pages/Redeem"
+import Settle from "./pages/Settle"
 
 function App() {
   const { chainId } = useEthereum();
@@ -21,11 +22,14 @@ function App() {
         <Header />
         <BodyWrapper maxW="container.xl" display="flex" alignItems="start" justifyContent="center">
           <Switch>
-            <Route path="/home">
-              <Home />
+            <Route path="/redeem">
+              <Redeem />
+            </Route>
+            <Route path="/settle">
+              <Settle />
             </Route>
             <Route path="/">
-              <Home />
+              <Redeem />
             </Route>
           </Switch>
         </BodyWrapper>
