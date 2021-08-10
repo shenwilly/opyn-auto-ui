@@ -1,6 +1,8 @@
 import { Button, Box, Flex, Text, useDisclosure } from "@chakra-ui/react"
 import Web3AccountModal from "../Web3AccountModal";
 import useEthereum from "../../hooks/useEthereum";
+import Blockies from 'react-blockies';
+import styled from "styled-components";
 
 const Web3Account = () => {
     const { web3Modal, loadWeb3Modal, logoutOfWeb3Modal, injectedProvider, accountAddress } = useEthereum()
@@ -17,9 +19,19 @@ const Web3Account = () => {
                     <Box px="2" py="1" border="1px" borderColor="black.200" cursor="pointer"
                         borderRadius={15} 
                         onClick={onOpen}>
-                        <Text>
-                            {truncateAddress(accountAddress)}
-                        </Text>
+                        <Flex>
+                            <StyledBlockies>
+                                <Blockies
+                                    seed="Jeremy"
+                                    size={8}
+                                    scale={3}
+                                />
+                            </StyledBlockies>
+
+                            <Text pl={1}>
+                                {truncateAddress(accountAddress)}
+                            </Text>
+                        </Flex>
                     </Box>
                 </Box>)
             }
@@ -35,5 +47,10 @@ const Web3Account = () => {
         </Flex>
     );
 };
+
+const StyledBlockies = styled.div`
+    border-radius: 15px;
+    overflow: hidden;
+`;
 
 export default Web3Account;
