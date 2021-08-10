@@ -55,6 +55,7 @@ export type SubgraphOrder = {
   vaultId: string
   isSeller: boolean
   toEth: boolean
+  fee: string
   finished: boolean
   finishTxHash: string
 }

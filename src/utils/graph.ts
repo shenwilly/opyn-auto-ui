@@ -121,6 +121,7 @@ export async function getOrders(
       vaultId
       isSeller
       toETH
+      fee
       finished
       finishTxHash
     }
