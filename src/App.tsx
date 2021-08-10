@@ -5,6 +5,7 @@ import styled, { ThemeProvider } from "styled-components"
 
 import Home from "./pages/Home"
 import Header from "./components/Header"
+import Footer from "./components/Footer"
 import chakraTheme from "./utils/chakraTheme"
 import { EthereumProvider } from "./contexts/Ethereum"
 import { GammaProvider } from "./contexts/Gamma"
@@ -28,6 +29,9 @@ function App() {
             </Route>
           </Switch>
         </BodyWrapper>
+        <FooterWrapper>
+          <Footer />
+        </FooterWrapper>
       </SiteWrapper>
       <ModalNetwork isOpen={chainId !== undefined && chainId !== CHAIN_ID.MAINNET} />
     </Router>
@@ -42,6 +46,13 @@ const SiteWrapper = styled.div`
 
 const BodyWrapper = styled(Container)`
   height: ${props => `calc(100vh - ${props.theme.headerHeight})`}
+`;
+
+const FooterWrapper = styled.div`
+  width: 100vw;
+  position: fixed;
+  bottom: 15px;
+  left: 0;
 `;
 
 const Providers: React.FC = ({ children }) => {
