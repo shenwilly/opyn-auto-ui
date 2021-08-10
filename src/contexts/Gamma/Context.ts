@@ -10,6 +10,10 @@ const Context = createContext<ContextValues>({
   orders: null,
   ordersIsLoading: false,
   refetchOrders: () => {},
+  redeemFee: null,
+  settleFee: null,
+  feesIsLoading: false,
+  refetchFees: () => {},
 });
 
 export default Context;
