@@ -10,6 +10,7 @@ import {
   useDisclosure,
   Link,
   Flex,
+  Spinner,
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers/lib/utils";
 import { useMemo, useState } from "react";
@@ -24,7 +25,7 @@ import { dateFormat } from "../../../../utils/date";
 import { buildEtherscanLink } from "../../../../utils/misc";
 
 const PanelBuyer: React.FC = () => {
-    const { balances, orders } = useGamma();
+    const { balances, balancesIsLoading, orders } = useGamma();
     const { chainId } = useEthereum();
     const [selectedOtoken, setSelectedOtoken] = useState<OTokenBalance>();
     const [selectedOrder, setSelectedOrder] = useState<SubgraphOrder>();
@@ -105,7 +106,7 @@ const PanelBuyer: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {balances && balances.map((otoken) => (
+              {balances && !balancesIsLoading && balances.map((otoken) => (
                 <Tr key={otoken.token.id}>
                   <Td>
                     {otoken.token.isPut
@@ -136,39 +137,22 @@ const PanelBuyer: React.FC = () => {
                   </Td>
                 </Tr>
               ))}
-              {/* <Tr>
-                <Td>Call</Td>
-                <Td>WETH</Td>
-                <Td>USDC 5000</Td>
-                <Td>Fri, 31 Dec 2021</Td>
-                <Td isNumeric>0.5</Td>
-                <Td textAlign="center">-</Td>
-                <Td>
-                  <Button w="100%" colorScheme="green" onClick={useRedeemModal.onOpen}>Auto Redeem</Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>Call</Td>
-                <Td>WETH</Td>
-                <Td>USDC 5000</Td>
-                <Td>Fri, 31 Dec 2021</Td>
-                <Td isNumeric>0.5</Td>
-                <Td textAlign="center">Waiting Expiry</Td>
-                <Td>
-                  <Button w="100%" colorScheme="blue" onClick={useDetailModal.onOpen}>Details</Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>Call</Td>
-                <Td>WETH</Td>
-                <Td>USDC 5000</Td>
-                <Td>Fri, 31 Dec 2021</Td>
-                <Td isNumeric>0.5</Td>
-                <Td textAlign="center">Waiting Redeem</Td>
-                <Td>
-                  <Button w="100%" colorScheme="blue" onClick={useDetailModal.onOpen}>Details</Button>
-                </Td>
-              </Tr> */}
+              
+              {balances && !balancesIsLoading && balances.length === 0 &&
+                <Tr>
+                  <Td colSpan={7}>
+                    <Text textAlign="center">
+                      You have no oTokens
+                    </Text>
+                  </Td>
+                </Tr>}
+
+              {balancesIsLoading &&
+                <Tr>
+                  <Td colSpan={7} textAlign="center">
+                    <Spinner />
+                  </Td>
+                </Tr>}
             </Tbody>
           </Table>
 

@@ -9,7 +9,8 @@ import {
   Button,
   Flex,
   Link,
-  useDisclosure
+  useDisclosure,
+  Spinner
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers/lib/utils";
 import { useMemo, useState } from "react";
@@ -20,7 +21,7 @@ import useGamma from "../../../../hooks/useGamma";
 import { SubgraphOrder, SubgraphVault } from "../../../../types";
 
 const PanelSeller: React.FC = () => {
-    const { vaults, orders } = useGamma();
+    const { vaults, vaultsIsLoading, orders } = useGamma();
     const useSettleModal = useDisclosure();
     const useVaultModal = useDisclosure();
     const [selectedVault, setSelectedVault] = useState<SubgraphVault>();
@@ -104,7 +105,7 @@ const PanelSeller: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {vaults && vaults.map((vault) => (
+              {vaults && !vaultsIsLoading && vaults.map((vault) => (
                 <Tr key={vault.vaultId}>
                   <Td>
                     {vault.collateralAsset !== null && vault.collateralAmount !== null 
@@ -136,24 +137,22 @@ const PanelSeller: React.FC = () => {
                   </Td>
                 </Tr>
               ))}
-              {/* <Tr>
-                <Td>WETH 0.1</Td>
-                <Td>-</Td>
-                <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
-                <Td textAlign="center">-</Td>
-                <Td>
-                  <Button w="100%" colorScheme="green" onClick={useSettleModal.onOpen}>Auto Settle</Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>WETH 0.1</Td>
-                <Td>-</Td>
-                <Td>0.1 oWETHUSDC/WETH-30JUL21-2200P</Td>
-                <Td textAlign="center">Waiting Expiry</Td>
-                <Td>
-                  <Button w="100%" colorScheme="blue" onClick={useVaultModal.onOpen}>Details</Button>
-                </Td>
-              </Tr> */}
+
+              {vaults && !vaultsIsLoading && vaults.length === 0 &&
+                <Tr>
+                  <Td colSpan={7}>
+                    <Text textAlign="center">
+                      You have no vaults
+                    </Text>
+                  </Td>
+                </Tr>}
+
+              {vaultsIsLoading &&
+                <Tr>
+                  <Td colSpan={7} textAlign="center">
+                    <Spinner />
+                  </Td>
+                </Tr>}
             </Tbody>
           </Table>
 
