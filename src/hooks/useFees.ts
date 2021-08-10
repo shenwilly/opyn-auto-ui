@@ -40,7 +40,7 @@ export function useFees(chainId: CHAIN_ID) {
     updateFees()
     const interval = setInterval(updateFees, DEFAULT_INTERVAL)
     return () => clearInterval(interval)
-  }, [injectedProvider, refreshCount, chainId])
+  }, [injectedProvider, refreshCount, chainId, getGammaRedeemer])
 
   return { redeemFee, settleFee, isLoading, refetch }
 }
