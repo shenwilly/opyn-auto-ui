@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers/lib/ethers";
 import { OTokenBalance, SubgraphOrder, SubgraphVault } from "../../types";
 
 export interface ContextValues {
@@ -9,4 +10,9 @@ export interface ContextValues {
   orders: SubgraphOrder[] | null,
   ordersIsLoading: boolean,
   refetchOrders: Function,
+  redeemFee: BigNumber | null,
+  settleFee: BigNumber | null,
+  feesIsLoading: boolean
+  refetchFees: Function,
 }
+

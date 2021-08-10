@@ -23,17 +23,22 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
   functions: {
     "addressBook()": FunctionFragment;
     "automator()": FunctionFragment;
+    "automatorTreasury()": FunctionFragment;
     "calculator()": FunctionFragment;
     "cancelOrder(uint256)": FunctionFragment;
     "controller()": FunctionFragment;
     "createOrder(address,uint256,uint256)": FunctionFragment;
     "getExcessCollateral(tuple,uint256)": FunctionFragment;
+    "getOrder(uint256)": FunctionFragment;
+    "getOrders()": FunctionFragment;
     "getOrdersLength()": FunctionFragment;
     "getRedeemPayout(address,uint256)": FunctionFragment;
     "getRedeemableAmount(address,address,uint256)": FunctionFragment;
     "getVaultOtoken(tuple)": FunctionFragment;
     "getVaultWithDetails(address,uint256)": FunctionFragment;
+    "harvest(address,uint256,address)": FunctionFragment;
     "hasExpiredAndSettlementAllowed(address)": FunctionFragment;
+    "isAutomatorEnabled()": FunctionFragment;
     "isOperatorOf(address)": FunctionFragment;
     "isSettlementAllowed(address)": FunctionFragment;
     "isValidVaultId(address,uint256)": FunctionFragment;
@@ -41,14 +46,24 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     "orders(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "processOrder(uint256)": FunctionFragment;
+    "processOrders(uint256[])": FunctionFragment;
+    "redeemFee()": FunctionFragment;
     "refreshConfig()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setAddressBook(address)": FunctionFragment;
+    "setAutomator(address)": FunctionFragment;
+    "setAutomatorTreasury(address)": FunctionFragment;
+    "setRedeemFee(uint256)": FunctionFragment;
+    "setSettleFee(uint256)": FunctionFragment;
+    "settleFee()": FunctionFragment;
     "shouldProcessOrder(uint256)": FunctionFragment;
     "shouldRedeemOtoken(address,address,uint256)": FunctionFragment;
     "shouldSettleVault(address,uint256)": FunctionFragment;
+    "startAutomator(address)": FunctionFragment;
+    "stopAutomator()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "whitelist()": FunctionFragment;
+    "withdrawFund(address,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -56,6 +71,10 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "automator", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "automatorTreasury",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "calculator",
     values?: undefined
@@ -87,6 +106,11 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getOrder",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "getOrders", values?: undefined): string;
+  encodeFunctionData(
     functionFragment: "getOrdersLength",
     values?: undefined
   ): string;
@@ -116,8 +140,16 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "harvest",
+    values: [string, BigNumberish, string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "hasExpiredAndSettlementAllowed",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isAutomatorEnabled",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "isOperatorOf",
@@ -145,6 +177,11 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "processOrders",
+    values: [BigNumberish[]]
+  ): string;
+  encodeFunctionData(functionFragment: "redeemFee", values?: undefined): string;
+  encodeFunctionData(
     functionFragment: "refreshConfig",
     values?: undefined
   ): string;
@@ -156,6 +193,23 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     functionFragment: "setAddressBook",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setAutomator",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAutomatorTreasury",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setRedeemFee",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSettleFee",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "settleFee", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "shouldProcessOrder",
     values: [BigNumberish]
@@ -169,16 +223,32 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "startAutomator",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "stopAutomator",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "whitelist", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "withdrawFund",
+    values: [string, BigNumberish]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "addressBook",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "automator", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "automatorTreasury",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "calculator", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "cancelOrder",
@@ -193,6 +263,8 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     functionFragment: "getExcessCollateral",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getOrder", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getOrders", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getOrdersLength",
     data: BytesLike
@@ -213,8 +285,13 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     functionFragment: "getVaultWithDetails",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "harvest", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "hasExpiredAndSettlementAllowed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isAutomatorEnabled",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -240,6 +317,11 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "processOrders",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "redeemFee", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "refreshConfig",
     data: BytesLike
   ): Result;
@@ -251,6 +333,23 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     functionFragment: "setAddressBook",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setAutomator",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setAutomatorTreasury",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setRedeemFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSettleFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "settleFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "shouldProcessOrder",
     data: BytesLike
@@ -264,10 +363,22 @@ interface GammaRedeemerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "startAutomator",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "stopAutomator",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "whitelist", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawFund",
+    data: BytesLike
+  ): Result;
 
   events: {
     "OrderCreated(uint256,address,address)": EventFragment;
@@ -328,6 +439,8 @@ export class GammaRedeemer extends BaseContract {
 
     automator(overrides?: CallOverrides): Promise<[string]>;
 
+    automatorTreasury(overrides?: CallOverrides): Promise<[string]>;
+
     calculator(overrides?: CallOverrides): Promise<[string]>;
 
     cancelOrder(
@@ -356,6 +469,59 @@ export class GammaRedeemer extends BaseContract {
       _typeVault: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber, boolean]>;
+
+    getOrder(
+      _orderId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [
+          string,
+          string,
+          BigNumber,
+          BigNumber,
+          boolean,
+          boolean,
+          BigNumber,
+          boolean
+        ] & {
+          owner: string;
+          otoken: string;
+          amount: BigNumber;
+          vaultId: BigNumber;
+          isSeller: boolean;
+          toETH: boolean;
+          fee: BigNumber;
+          finished: boolean;
+        }
+      ]
+    >;
+
+    getOrders(
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        ([
+          string,
+          string,
+          BigNumber,
+          BigNumber,
+          boolean,
+          boolean,
+          BigNumber,
+          boolean
+        ] & {
+          owner: string;
+          otoken: string;
+          amount: BigNumber;
+          vaultId: BigNumber;
+          isSeller: boolean;
+          toETH: boolean;
+          fee: BigNumber;
+          finished: boolean;
+        })[]
+      ]
+    >;
 
     getOrdersLength(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -410,10 +576,19 @@ export class GammaRedeemer extends BaseContract {
       ]
     >;
 
+    harvest(
+      _token: string,
+      _amount: BigNumberish,
+      _to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     hasExpiredAndSettlementAllowed(
       _otoken: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    isAutomatorEnabled(overrides?: CallOverrides): Promise<[boolean]>;
 
     isOperatorOf(_owner: string, overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -437,13 +612,23 @@ export class GammaRedeemer extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, string, BigNumber, BigNumber, boolean, boolean, boolean] & {
+      [
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        boolean,
+        boolean,
+        BigNumber,
+        boolean
+      ] & {
         owner: string;
         otoken: string;
         amount: BigNumber;
         vaultId: BigNumber;
         isSeller: boolean;
         toETH: boolean;
+        fee: BigNumber;
         finished: boolean;
       }
     >;
@@ -454,6 +639,13 @@ export class GammaRedeemer extends BaseContract {
       _orderId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    processOrders(
+      _orderIds: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    redeemFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     refreshConfig(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -467,6 +659,28 @@ export class GammaRedeemer extends BaseContract {
       _address: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setAutomator(
+      _automator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setAutomatorTreasury(
+      _automatorTreasury: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setRedeemFee(
+      _redeemFee: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setSettleFee(
+      _settleFee: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    settleFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     shouldProcessOrder(
       _orderId: BigNumberish,
@@ -486,17 +700,34 @@ export class GammaRedeemer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    startAutomator(
+      _resolver: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    stopAutomator(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     whitelist(overrides?: CallOverrides): Promise<[string]>;
+
+    withdrawFund(
+      _token: string,
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   addressBook(overrides?: CallOverrides): Promise<string>;
 
   automator(overrides?: CallOverrides): Promise<string>;
+
+  automatorTreasury(overrides?: CallOverrides): Promise<string>;
 
   calculator(overrides?: CallOverrides): Promise<string>;
 
@@ -526,6 +757,55 @@ export class GammaRedeemer extends BaseContract {
     _typeVault: BigNumberish,
     overrides?: CallOverrides
   ): Promise<[BigNumber, boolean]>;
+
+  getOrder(
+    _orderId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      string,
+      string,
+      BigNumber,
+      BigNumber,
+      boolean,
+      boolean,
+      BigNumber,
+      boolean
+    ] & {
+      owner: string;
+      otoken: string;
+      amount: BigNumber;
+      vaultId: BigNumber;
+      isSeller: boolean;
+      toETH: boolean;
+      fee: BigNumber;
+      finished: boolean;
+    }
+  >;
+
+  getOrders(
+    overrides?: CallOverrides
+  ): Promise<
+    ([
+      string,
+      string,
+      BigNumber,
+      BigNumber,
+      boolean,
+      boolean,
+      BigNumber,
+      boolean
+    ] & {
+      owner: string;
+      otoken: string;
+      amount: BigNumber;
+      vaultId: BigNumber;
+      isSeller: boolean;
+      toETH: boolean;
+      fee: BigNumber;
+      finished: boolean;
+    })[]
+  >;
 
   getOrdersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -573,10 +853,19 @@ export class GammaRedeemer extends BaseContract {
     ]
   >;
 
+  harvest(
+    _token: string,
+    _amount: BigNumberish,
+    _to: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   hasExpiredAndSettlementAllowed(
     _otoken: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  isAutomatorEnabled(overrides?: CallOverrides): Promise<boolean>;
 
   isOperatorOf(_owner: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -600,13 +889,23 @@ export class GammaRedeemer extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [string, string, BigNumber, BigNumber, boolean, boolean, boolean] & {
+    [
+      string,
+      string,
+      BigNumber,
+      BigNumber,
+      boolean,
+      boolean,
+      BigNumber,
+      boolean
+    ] & {
       owner: string;
       otoken: string;
       amount: BigNumber;
       vaultId: BigNumber;
       isSeller: boolean;
       toETH: boolean;
+      fee: BigNumber;
       finished: boolean;
     }
   >;
@@ -617,6 +916,13 @@ export class GammaRedeemer extends BaseContract {
     _orderId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  processOrders(
+    _orderIds: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  redeemFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   refreshConfig(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -630,6 +936,28 @@ export class GammaRedeemer extends BaseContract {
     _address: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  setAutomator(
+    _automator: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setAutomatorTreasury(
+    _automatorTreasury: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setRedeemFee(
+    _redeemFee: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setSettleFee(
+    _settleFee: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  settleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   shouldProcessOrder(
     _orderId: BigNumberish,
@@ -649,6 +977,15 @@ export class GammaRedeemer extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  startAutomator(
+    _resolver: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  stopAutomator(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -656,10 +993,18 @@ export class GammaRedeemer extends BaseContract {
 
   whitelist(overrides?: CallOverrides): Promise<string>;
 
+  withdrawFund(
+    _token: string,
+    _amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     addressBook(overrides?: CallOverrides): Promise<string>;
 
     automator(overrides?: CallOverrides): Promise<string>;
+
+    automatorTreasury(overrides?: CallOverrides): Promise<string>;
 
     calculator(overrides?: CallOverrides): Promise<string>;
 
@@ -689,6 +1034,55 @@ export class GammaRedeemer extends BaseContract {
       _typeVault: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber, boolean]>;
+
+    getOrder(
+      _orderId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        boolean,
+        boolean,
+        BigNumber,
+        boolean
+      ] & {
+        owner: string;
+        otoken: string;
+        amount: BigNumber;
+        vaultId: BigNumber;
+        isSeller: boolean;
+        toETH: boolean;
+        fee: BigNumber;
+        finished: boolean;
+      }
+    >;
+
+    getOrders(
+      overrides?: CallOverrides
+    ): Promise<
+      ([
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        boolean,
+        boolean,
+        BigNumber,
+        boolean
+      ] & {
+        owner: string;
+        otoken: string;
+        amount: BigNumber;
+        vaultId: BigNumber;
+        isSeller: boolean;
+        toETH: boolean;
+        fee: BigNumber;
+        finished: boolean;
+      })[]
+    >;
 
     getOrdersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -743,10 +1137,19 @@ export class GammaRedeemer extends BaseContract {
       ]
     >;
 
+    harvest(
+      _token: string,
+      _amount: BigNumberish,
+      _to: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     hasExpiredAndSettlementAllowed(
       _otoken: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    isAutomatorEnabled(overrides?: CallOverrides): Promise<boolean>;
 
     isOperatorOf(_owner: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -770,13 +1173,23 @@ export class GammaRedeemer extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, string, BigNumber, BigNumber, boolean, boolean, boolean] & {
+      [
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        boolean,
+        boolean,
+        BigNumber,
+        boolean
+      ] & {
         owner: string;
         otoken: string;
         amount: BigNumber;
         vaultId: BigNumber;
         isSeller: boolean;
         toETH: boolean;
+        fee: BigNumber;
         finished: boolean;
       }
     >;
@@ -788,11 +1201,37 @@ export class GammaRedeemer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    processOrders(
+      _orderIds: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    redeemFee(overrides?: CallOverrides): Promise<BigNumber>;
+
     refreshConfig(overrides?: CallOverrides): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     setAddressBook(_address: string, overrides?: CallOverrides): Promise<void>;
+
+    setAutomator(_automator: string, overrides?: CallOverrides): Promise<void>;
+
+    setAutomatorTreasury(
+      _automatorTreasury: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setRedeemFee(
+      _redeemFee: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSettleFee(
+      _settleFee: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    settleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     shouldProcessOrder(
       _orderId: BigNumberish,
@@ -812,12 +1251,22 @@ export class GammaRedeemer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    startAutomator(_resolver: string, overrides?: CallOverrides): Promise<void>;
+
+    stopAutomator(overrides?: CallOverrides): Promise<void>;
+
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     whitelist(overrides?: CallOverrides): Promise<string>;
+
+    withdrawFund(
+      _token: string,
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -852,6 +1301,8 @@ export class GammaRedeemer extends BaseContract {
 
     automator(overrides?: CallOverrides): Promise<BigNumber>;
 
+    automatorTreasury(overrides?: CallOverrides): Promise<BigNumber>;
+
     calculator(overrides?: CallOverrides): Promise<BigNumber>;
 
     cancelOrder(
@@ -880,6 +1331,13 @@ export class GammaRedeemer extends BaseContract {
       _typeVault: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getOrder(
+      _orderId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getOrders(overrides?: CallOverrides): Promise<BigNumber>;
 
     getOrdersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -914,10 +1372,19 @@ export class GammaRedeemer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    harvest(
+      _token: string,
+      _amount: BigNumberish,
+      _to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     hasExpiredAndSettlementAllowed(
       _otoken: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    isAutomatorEnabled(overrides?: CallOverrides): Promise<BigNumber>;
 
     isOperatorOf(_owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -946,6 +1413,13 @@ export class GammaRedeemer extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    processOrders(
+      _orderIds: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    redeemFee(overrides?: CallOverrides): Promise<BigNumber>;
+
     refreshConfig(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -958,6 +1432,28 @@ export class GammaRedeemer extends BaseContract {
       _address: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    setAutomator(
+      _automator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setAutomatorTreasury(
+      _automatorTreasury: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setRedeemFee(
+      _redeemFee: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setSettleFee(
+      _settleFee: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    settleFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     shouldProcessOrder(
       _orderId: BigNumberish,
@@ -977,18 +1473,35 @@ export class GammaRedeemer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    startAutomator(
+      _resolver: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    stopAutomator(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     whitelist(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdrawFund(
+      _token: string,
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     addressBook(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     automator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    automatorTreasury(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     calculator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1018,6 +1531,13 @@ export class GammaRedeemer extends BaseContract {
       _typeVault: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    getOrder(
+      _orderId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getOrders(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getOrdersLength(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1052,8 +1572,19 @@ export class GammaRedeemer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    harvest(
+      _token: string,
+      _amount: BigNumberish,
+      _to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     hasExpiredAndSettlementAllowed(
       _otoken: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isAutomatorEnabled(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1090,6 +1621,13 @@ export class GammaRedeemer extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    processOrders(
+      _orderIds: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    redeemFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     refreshConfig(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1102,6 +1640,28 @@ export class GammaRedeemer extends BaseContract {
       _address: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    setAutomator(
+      _automator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setAutomatorTreasury(
+      _automatorTreasury: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRedeemFee(
+      _redeemFee: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSettleFee(
+      _settleFee: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    settleFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     shouldProcessOrder(
       _orderId: BigNumberish,
@@ -1121,11 +1681,26 @@ export class GammaRedeemer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    startAutomator(
+      _resolver: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    stopAutomator(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     whitelist(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdrawFund(
+      _token: string,
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

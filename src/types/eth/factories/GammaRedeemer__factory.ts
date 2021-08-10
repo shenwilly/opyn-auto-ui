@@ -19,6 +19,11 @@ const _abi = [
         name: "_automator",
         type: "address",
       },
+      {
+        internalType: "address",
+        name: "_automatorTreasury",
+        type: "address",
+      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -105,6 +110,19 @@ const _abi = [
     outputs: [
       {
         internalType: "contract IPokeMe",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "automatorTreasury",
+    outputs: [
+      {
+        internalType: "contract ITaskTreasury",
         name: "",
         type: "address",
       },
@@ -230,6 +248,122 @@ const _abi = [
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_orderId",
+        type: "uint256",
+      },
+    ],
+    name: "getOrder",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "otoken",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vaultId",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "isSeller",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "toETH",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "fee",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "finished",
+            type: "bool",
+          },
+        ],
+        internalType: "struct IGammaRedeemerV1.Order",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getOrders",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "otoken",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vaultId",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "isSeller",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "toETH",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "fee",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "finished",
+            type: "bool",
+          },
+        ],
+        internalType: "struct IGammaRedeemerV1.Order[]",
+        name: "",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -422,11 +556,47 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+    ],
+    name: "harvest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "_otoken",
         type: "address",
       },
     ],
     name: "hasExpiredAndSettlementAllowed",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "isAutomatorEnabled",
     outputs: [
       {
         internalType: "bool",
@@ -559,6 +729,11 @@ const _abi = [
         type: "bool",
       },
       {
+        internalType: "uint256",
+        name: "fee",
+        type: "uint256",
+      },
+      {
         internalType: "bool",
         name: "finished",
         type: "bool",
@@ -594,6 +769,32 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "_orderIds",
+        type: "uint256[]",
+      },
+    ],
+    name: "processOrders",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "redeemFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "refreshConfig",
     outputs: [],
@@ -618,6 +819,71 @@ const _abi = [
     name: "setAddressBook",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_automator",
+        type: "address",
+      },
+    ],
+    name: "setAutomator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_automatorTreasury",
+        type: "address",
+      },
+    ],
+    name: "setAutomatorTreasury",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_redeemFee",
+        type: "uint256",
+      },
+    ],
+    name: "setRedeemFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_settleFee",
+        type: "uint256",
+      },
+    ],
+    name: "setSettleFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "settleFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -696,6 +962,26 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "_resolver",
+        type: "address",
+      },
+    ],
+    name: "startAutomator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "stopAutomator",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "newOwner",
         type: "address",
       },
@@ -717,6 +1003,28 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawFund",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
   },
 ];
 

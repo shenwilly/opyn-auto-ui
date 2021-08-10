@@ -28,15 +28,15 @@ const PanelSeller: React.FC = () => {
   
     const settleOrders = useMemo(() => {
       return orders?.filter((order) => order.isSeller) ?? [];
-    }, [orders]) ;
+    }, [orders]);
 
     const activeOrders = useMemo(() => {
       return settleOrders?.filter((order) => !order.finished && order.isSeller) ?? [];
-    }, [settleOrders]) ;
+    }, [settleOrders]);
 
     const pastOrders = useMemo(() => {
       return settleOrders?.filter((order) => order.finished && order.isSeller) ?? [];
-    }, [settleOrders]) ;
+    }, [settleOrders]);
 
     const hasActiveOrder = (vaultId: string): boolean => {
       const activeOrder = activeOrders?.find((order) => order.vaultId === vaultId);
