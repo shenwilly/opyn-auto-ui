@@ -7,15 +7,15 @@ import { GAMMA_REDEEMER_ADDRESS } from '../constants/address';
 import { GammaRedeemer } from '../types/eth/GammaRedeemer';
 
 export function useFees(chainId: CHAIN_ID) {
-  const { ethAccount } = useEthereum();
+  const { injectedProvider } = useEthereum();
   const [redeemFee, setRedeemFee] = useState<BigNumber | null>(null);
   const [settleFee, setSettleFee] = useState<BigNumber | null>(null);
   const [refreshCount, setRefreshCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true)
 
   const getGammaRedeemer = useCallback((): GammaRedeemer => {
-    return (new ethers.Contract(GAMMA_REDEEMER_ADDRESS[chainId], GammaRedeemerAbi, ethAccount)) as GammaRedeemer;
-  }, [chainId, ethAccount]);
+    return (new ethers.Contract(GAMMA_REDEEMER_ADDRESS[chainId], GammaRedeemerAbi, injectedProvider)) as GammaRedeemer;
+  }, [chainId, injectedProvider]);
   
   const refetch = useCallback(() => {
     setRefreshCount(count => count + 1)
@@ -23,6 +23,9 @@ export function useFees(chainId: CHAIN_ID) {
 
   useEffect(() => {
     async function updateFees() {
+      if (!injectedProvider) {
+        return;
+      }
       setIsLoading(true);
 
       const gammaRedeemer = getGammaRedeemer();
@@ -37,7 +40,7 @@ export function useFees(chainId: CHAIN_ID) {
     updateFees()
     const interval = setInterval(updateFees, DEFAULT_INTERVAL)
     return () => clearInterval(interval)
-  }, [ethAccount, refreshCount, chainId])
+  }, [injectedProvider, refreshCount, chainId])
 
   return { redeemFee, settleFee, isLoading, refetch }
 }
