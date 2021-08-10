@@ -12,6 +12,7 @@ import useGamma from "../../hooks/useGamma";
 import { useOrders } from "../../hooks/useOrders";
 import { OTokenBalance } from "../../types";
 import { dateFormat } from "../../utils/date";
+import { formatFee } from "../../utils/misc";
 
 interface ModalProps {
   otoken: OTokenBalance;
@@ -21,7 +22,7 @@ interface ModalProps {
 
 const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
   const { accountAddress, chainId } = useEthereum();
-  const { refetchOrders } = useGamma();
+  const { refetchOrders, redeemFee } = useGamma();
   const { allowance, allowanceIsLoading, approve, approveIsLoading } = useAllowance(otoken.token.id, GAMMA_REDEEMER_ADDRESS[chainId]);
   const { createOrder, isLoading:createIsLoading } = useOrders(accountAddress, chainId);
   const toast = useToast();
@@ -71,6 +72,12 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
 
             <Text>
               Expiry: {dateFormat(parseInt(otoken.token.expiryTimestamp) * 1000)}
+            </Text>
+
+            <Text>
+              Fee: {redeemFee !== null
+                      ? `${formatFee(redeemFee)}%`
+                      : '-'}
             </Text>
 
             {!isAllowanceEnough && 

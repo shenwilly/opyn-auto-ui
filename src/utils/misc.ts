@@ -1,3 +1,5 @@
+import { BigNumberish } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 import { CHAIN_ID, etherscanEndpoint, ETHERSCAN_LINK_TYPE } from "../constants"
 
 export const buildEtherscanLink = (type: ETHERSCAN_LINK_TYPE, value: string, chainId: CHAIN_ID) => {
@@ -11,4 +13,8 @@ export const buildEtherscanLink = (type: ETHERSCAN_LINK_TYPE, value: string, cha
 
   const url = baseUrl + suffix + value;
   return url;
+}
+
+export const formatFee = (fee: BigNumberish) => {
+  return formatUnits(fee, 2);
 }

@@ -10,6 +10,7 @@ import useGamma from "../../hooks/useGamma";
 import { useOrders } from "../../hooks/useOrders";
 import { OTokenBalance, SubgraphOrder } from "../../types";
 import { dateFormat } from "../../utils/date";
+import { formatFee } from "../../utils/misc";
 
 interface ModalProps {
   otoken: OTokenBalance;
@@ -61,6 +62,12 @@ const ModalOtoken: React.FC<ModalProps> = ({ otoken, order, isOpen, onClose }) =
 
             <Text>
               Expiry: {dateFormat(parseInt(otoken.token.expiryTimestamp) * 1000)}
+            </Text>
+
+            <Text>
+              Fee: {order.fee !== null
+                      ? `${formatFee(order.fee)}%`
+                      : '-'}
             </Text>
 
             <Button w="100%" colorScheme="orange" mt={5} mb={3}

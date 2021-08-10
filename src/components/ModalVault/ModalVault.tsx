@@ -10,6 +10,7 @@ import { useOrders } from "../../hooks/useOrders";
 import { SubgraphOrder, SubgraphVault } from "../../types";
 import { dateFormat } from "../../utils/date";
 import { getVaultOtoken } from "../../utils/gamma";
+import { formatFee } from "../../utils/misc";
 
 interface ModalProps {
   vault: SubgraphVault;
@@ -73,6 +74,12 @@ const ModalVault: React.FC<ModalProps> = ({ vault, order, isOpen, onClose }) => 
             Expiry: {otoken 
                       ? dateFormat(parseInt(otoken.expiryTimestamp) * 1000)
                       : '-'}
+          </Text>
+
+          <Text>
+            Fee: {order.fee !== null
+                    ? `${formatFee(order.fee)}%`
+                    : '-'}
           </Text>
 
           <Button w="100%" colorScheme="orange" mt={5} mb={3}

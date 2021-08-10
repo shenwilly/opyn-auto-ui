@@ -13,6 +13,7 @@ import { useOrders } from "../../hooks/useOrders";
 import { SubgraphVault } from "../../types";
 import { dateFormat } from "../../utils/date";
 import { getVaultOtoken } from "../../utils/gamma";
+import { formatFee } from "../../utils/misc";
 
 interface ModalProps {
   vault: SubgraphVault;
@@ -22,7 +23,7 @@ interface ModalProps {
 
 const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
   const { accountAddress, chainId } = useEthereum();
-  const { refetchVaults } = useGamma();
+  const { refetchVaults, settleFee } = useGamma();
   const { setOperator, isLoading:setIsLoading, 
     isOperator, fetchIsLoading, refetch:refetchIsOperator } = useOperator(GAMMA_CONTROLLER_ADDRESS[chainId], chainId);
   const { createOrder, isLoading:createIsLoading } = useOrders(accountAddress, chainId);
@@ -90,6 +91,12 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
               Expiry: {otoken 
                         ? dateFormat(parseInt(otoken.expiryTimestamp) * 1000)
                         : '-'}
+            </Text>
+
+            <Text>
+              Fee: {settleFee !== null
+                      ? `${formatFee(settleFee)}%`
+                      : '-'}
             </Text>
 
             {!isOperator &&
