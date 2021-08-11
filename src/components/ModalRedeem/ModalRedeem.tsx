@@ -66,7 +66,7 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
     text += ".";
 
     return text;
-  }, [redeemFee, otoken]);
+  }, [redeemFee, expiryText, otoken]);
   
   return (
       <Modal isOpen={isOpen} onClose={onClose}>

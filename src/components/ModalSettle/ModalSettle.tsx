@@ -70,7 +70,7 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
     text += ".";
 
     return text;
-  }, [settleFee, otoken]);
+  }, [settleFee, otoken, expiryText]);
 
   return (
       <Modal isOpen={isOpen} onClose={onClose}>
