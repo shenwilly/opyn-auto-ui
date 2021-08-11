@@ -189,7 +189,7 @@ const PanelSeller: React.FC = () => {
                 <Tr>
                   <Td colSpan={3}>
                     <Text textAlign="center">
-                      You have no previous orders
+                      You have no finished orders
                     </Text>
                   </Td>
                 </Tr>}
