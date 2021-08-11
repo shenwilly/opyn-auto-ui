@@ -168,7 +168,9 @@ export async function getOrders(
       toETH
       fee
       finished
+      cancelled
       finishTxHash
+      timestamp
     }
   }`
   try {

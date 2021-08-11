@@ -57,5 +57,7 @@ export type SubgraphOrder = {
   toEth: boolean
   fee: string
   finished: boolean
+  cancelled: boolean
   finishTxHash: string
+  timestamp: string
 }

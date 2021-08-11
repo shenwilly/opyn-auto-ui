@@ -171,9 +171,10 @@ const PanelBuyer: React.FC = () => {
           <Table variant="simple">
             <Thead>
               <Tr>
+                <Th>Date Time</Th>
                 <Th>Option</Th>
                 <Th isNumeric>Amount</Th>
-                <Th>Txn Hash</Th>
+                <Th>Status</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -183,12 +184,13 @@ const PanelBuyer: React.FC = () => {
                 
                 return (
                   <Tr key={order.orderId}>
+                    <Td>{dateFormat(parseInt(order.timestamp) * 1000)}</Td>
                     <Td>{otoken.symbol}</Td>
                     <Td isNumeric>{formatUnits(order.amount, otoken.decimals)}</Td>
                     <Td>
                       <Link href={buildEtherscanLink(ETHERSCAN_LINK_TYPE.Tx, order.finishTxHash, chainId)} isExternal>
                         <Flex as="u">
-                          <Text mr="2">{order.finishTxHash}</Text> <BiLinkExternal/>
+                          <Text mr="2">{order.cancelled ? 'Cancelled' : 'Redeemed'}</Text> <BiLinkExternal/>
                         </Flex>
                       </Link>
                     </Td>
@@ -198,7 +200,7 @@ const PanelBuyer: React.FC = () => {
               
               {pastOrders && !orderFetchIsLoading && pastOrders.length === 0 &&
                 <Tr>
-                  <Td colSpan={3}>
+                  <Td colSpan={4}>
                     <Text textAlign="center">
                       You have no previous orders
                     </Text>
@@ -207,7 +209,7 @@ const PanelBuyer: React.FC = () => {
 
               {orderFetchIsLoading &&
                 <Tr>
-                  <Td colSpan={3} textAlign="center">
+                  <Td colSpan={4} textAlign="center">
                     <Spinner />
                   </Td>
                 </Tr>}

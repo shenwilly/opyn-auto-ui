@@ -21,6 +21,7 @@ import { ETHERSCAN_LINK_TYPE } from "../../../../constants";
 import useEthereum from "../../../../hooks/useEthereum";
 import useGamma from "../../../../hooks/useGamma";
 import { SubgraphOrder, SubgraphVault } from "../../../../types";
+import { dateFormat } from "../../../../utils/date";
 import { buildEtherscanLink } from "../../../../utils/misc";
 
 const PanelSeller: React.FC = () => {
@@ -164,18 +165,20 @@ const PanelSeller: React.FC = () => {
           <Table variant="simple">
             <Thead>
               <Tr>
+                <Th>Date Time</Th>
                 <Th>Vault Id</Th>
-                <Th isNumeric>Txn Hash</Th>
+                <Th>Status</Th>
               </Tr>
             </Thead>
             <Tbody>
               {pastOrders && !orderFetchIsLoading && pastOrders.map((order) => (
                 <Tr key={order.orderId}>
+                  <Td>{dateFormat(parseInt(order.timestamp) * 1000)}</Td>
                   <Td>1</Td>
                   <Td>
                     <Link href={buildEtherscanLink(ETHERSCAN_LINK_TYPE.Tx, order.finishTxHash, chainId)} isExternal>
                         <Flex as="u">
-                          <Text mr="2">{order.finishTxHash}</Text> <BiLinkExternal/>
+                          <Text mr="2">{order.cancelled ? 'Cancelled' : 'Settled'}</Text> <BiLinkExternal/>
                         </Flex>
                       </Link>
                   </Td>
@@ -184,7 +187,7 @@ const PanelSeller: React.FC = () => {
 
               {pastOrders && !orderFetchIsLoading && pastOrders.length === 0 &&
                 <Tr>
-                  <Td colSpan={2}>
+                  <Td colSpan={3}>
                     <Text textAlign="center">
                       You have no previous orders
                     </Text>
@@ -193,22 +196,10 @@ const PanelSeller: React.FC = () => {
 
               {orderFetchIsLoading &&
                 <Tr>
-                  <Td colSpan={2} textAlign="center">
+                  <Td colSpan={3} textAlign="center">
                     <Spinner />
                   </Td>
                 </Tr>}
-              {/* <Tr>
-                <Td>WETH 0.1</Td>
-                <Td>-</Td>
-                <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
-                <Td>
-                  <Link href="https://chakra-ui.com" isExternal>
-                      <Flex as="u">
-                        <Text mr="2">Settled</Text> <BiLinkExternal/>
-                      </Flex>
-                    </Link>
-                </Td>
-              </Tr> */}
             </Tbody>
           </Table>
               
