@@ -27,7 +27,7 @@ const ModalNetwork: React.FC<ModalProps> = ({ isOpen }) => {
           <ModalBody>
             <Center>
               <Text fontWeight="bold" width="100%">
-                Please switch to Mainnet or Ropsten  
+                Please switch to Mainnet
               </Text>
             </Center>
             <Button isFullWidth colorScheme="green" mt={5} mb={3}
