@@ -20,9 +20,10 @@ export function useVaults(
 
   useEffect(() => {
     async function updateVaults() {
+      setIsLoading(true)
       const vaults = await getVaults(chainId, account);
-      if (vaults === null) return
       setIsLoading(false)
+      if (vaults === null) return
       setVaults(vaults)
     }
     updateVaults()

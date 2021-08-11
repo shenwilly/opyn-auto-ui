@@ -20,9 +20,10 @@ export function useOTokenBalances(
 
   useEffect(() => {
     async function updateBalances() {
+      setIsLoading(true)
       const balances = await getBalances(chainId, account)
-      if (balances === null) return
       setIsLoading(false)
+      if (balances === null) return
       setBalances(balances)
     }
     updateBalances()
