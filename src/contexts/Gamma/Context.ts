@@ -10,6 +10,7 @@ const Context = createContext<ContextValues>({
   orders: null,
   ordersIsLoading: false,
   refetchOrders: () => {},
+  orderFetchIsLoading: false,
   redeemFee: null,
   settleFee: null,
   feesIsLoading: false,

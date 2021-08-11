@@ -10,6 +10,7 @@ export interface ContextValues {
   orders: SubgraphOrder[] | null,
   ordersIsLoading: boolean,
   refetchOrders: Function,
+  orderFetchIsLoading: boolean,
   redeemFee: BigNumber | null,
   settleFee: BigNumber | null,
   feesIsLoading: boolean

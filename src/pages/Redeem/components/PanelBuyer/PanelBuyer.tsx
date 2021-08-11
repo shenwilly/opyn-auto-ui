@@ -11,24 +11,27 @@ import {
   Link,
   Flex,
   Spinner,
+  Box,
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers/lib/utils";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BiLinkExternal } from 'react-icons/bi';
 import ModalOtoken from "../../../../components/ModalOtoken";
 import ModalRedeem from "../../../../components/ModalRedeem/ModalRedeem";
-import { ETHERSCAN_LINK_TYPE, STRIKE_PRICE_DECIMALS } from "../../../../constants";
+import { CHAIN_ID, ETHERSCAN_LINK_TYPE, STRIKE_PRICE_DECIMALS } from "../../../../constants";
 import useEthereum from "../../../../hooks/useEthereum";
 import useGamma from "../../../../hooks/useGamma";
 import { OTokenBalance, SubgraphOrder, SubgraphOToken } from "../../../../types";
 import { dateFormat } from "../../../../utils/date";
+import { getOtokens } from "../../../../utils/graph";
 import { buildEtherscanLink } from "../../../../utils/misc";
 
 const PanelBuyer: React.FC = () => {
-    const { balances, balancesIsLoading, orders } = useGamma();
+    const { balances, balancesIsLoading, orders, orderFetchIsLoading } = useGamma();
     const { chainId } = useEthereum();
     const [selectedOtoken, setSelectedOtoken] = useState<OTokenBalance>();
     const [selectedOrder, setSelectedOrder] = useState<SubgraphOrder>();
+    const [historyOtokens, setHistoryOtokens] = useState<SubgraphOToken[]>([]);
     
     const useRedeemModal = useDisclosure();
     const useDetailModal = useDisclosure();
@@ -38,11 +41,11 @@ const PanelBuyer: React.FC = () => {
     }, [orders]) ;
 
     const activeOrders = useMemo(() => {
-      return redeemOrders?.filter((order) => !order.finished && !order.isSeller) ?? [];
+      return redeemOrders?.filter((order) => !order.finished) ?? [];
     }, [redeemOrders]) ;
 
     const pastOrders = useMemo(() => {
-      return redeemOrders?.filter((order) => order.finished && !order.isSeller) ?? [];
+      return redeemOrders?.filter((order) => order.finished) ?? [];
     }, [redeemOrders]) ;
 
     const hasActiveOrder = (otokenAddress: string): boolean => {
@@ -90,9 +93,18 @@ const PanelBuyer: React.FC = () => {
       useRedeemModal.onOpen();
     }
 
+    useEffect(() => {
+      const fetchTokens = async (addreses: string[]) => {
+        const oTokens = await getOtokens(CHAIN_ID.MAINNET, addreses);
+        setHistoryOtokens(oTokens ?? []);
+      }
+      const addreses = pastOrders.map((order) => order.otoken);
+      fetchTokens(addreses);
+    }, [pastOrders])
+
     return (
         <>
-          <Text my="4">My oTokens</Text>
+          <Text mt="5" fontWeight="bold">My oTokens</Text>
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -156,64 +168,52 @@ const PanelBuyer: React.FC = () => {
             </Tbody>
           </Table>
 
-          {/* TODO: fetch otoken details from otoke ids */}
-          {/* <Text my="4">Order History</Text>
+          <Text mt="5" fontWeight="bold">Order History</Text>
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>Type</Th>
-                <Th>Asset</Th>
-                <Th>Strike</Th>
-                <Th>Expiry</Th>
-                <Th>Amount</Th>
-                <Th>Total Return</Th>
-                <Th textAlign="right">Status</Th>
+                <Th>Option</Th>
+                <Th isNumeric>Amount</Th>
+                <Th>Txn Hash</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {pastOrders && pastOrders.map((order) => (
-                <Tr key={order.orderId}>
-                  <Td>Call</Td>
-                  <Td>WETH</Td>
-                  <Td>USDC 5000</Td>
-                  <Td>Fri, 31 Dec 2021</Td>
-                  <Td isNumeric>0.5</Td>
-                  <Td isNumeric>$100</Td>
-                  <Td textAlign="right">
-                    <Link href={buildEtherscanLink(ETHERSCAN_LINK_TYPE.Tx, order.finishTxHash, chainId)} isExternal>
-                      <Flex as="u">
-                        <Text mr="2">Redeemed</Text> <BiLinkExternal/>
-                      </Flex>
-                    </Link>
+              {pastOrders && !orderFetchIsLoading && pastOrders.map((order) => {
+                let otoken = historyOtokens.find((token) => token.id === order.otoken);
+                if (!otoken) return null;
+                
+                return (
+                  <Tr key={order.orderId}>
+                    <Td>{otoken.symbol}</Td>
+                    <Td isNumeric>{formatUnits(order.amount, otoken.decimals)}</Td>
+                    <Td>
+                      <Link href={buildEtherscanLink(ETHERSCAN_LINK_TYPE.Tx, order.finishTxHash, chainId)} isExternal>
+                        <Flex as="u">
+                          <Text mr="2">{order.finishTxHash}</Text> <BiLinkExternal/>
+                        </Flex>
+                      </Link>
+                    </Td>
+                  </Tr>
+                )
+              })}
+              
+              {pastOrders && !orderFetchIsLoading && pastOrders.length === 0 &&
+                <Tr>
+                  <Td colSpan={3}>
+                    <Text textAlign="center">
+                      You have no previous orders
+                    </Text>
                   </Td>
-                </Tr>
-              ))}
-              <Tr>
-                <Td>Call</Td>
-                <Td>WETH</Td>
-                <Td>USDC 5000</Td>
-                <Td>Fri, 31 Dec 2021</Td>
-                <Td isNumeric>0.5</Td>
-                <Td isNumeric>$100</Td>
-                <Td textAlign="right">
-                  <Link href="https://chakra-ui.com" isExternal>
-                    <Flex as="u">
-                      <Text mr="2">Redeemed</Text> <BiLinkExternal/>
-                    </Flex>
-                  </Link>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>Put</Td>
-                <Td>WETH</Td>
-                <Td>USDC 5000</Td>
-                <Td>Fri, 31 Dec 2021</Td>
-                <Td isNumeric>0.5</Td>
-                <Td isNumeric>$0</Td>
-                <Td textAlign="right">Not Profitable</Td>
-              </Tr>
+                </Tr>}
+
+              {orderFetchIsLoading &&
+                <Tr>
+                  <Td colSpan={3} textAlign="center">
+                    <Spinner />
+                  </Td>
+                </Tr>}
             </Tbody>
-          </Table> */}
+          </Table>
 
           {selectedOtoken && 
             <ModalRedeem otoken={selectedOtoken} isOpen={useRedeemModal.isOpen} onClose={useRedeemModal.onClose}/>}
