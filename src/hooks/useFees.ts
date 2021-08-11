@@ -28,11 +28,14 @@ export function useFees(chainId: CHAIN_ID) {
       }
 
       const gammaRedeemer = getGammaRedeemer();
-      const redeemFee = await gammaRedeemer.redeemFee();
-      const settleFee = await gammaRedeemer.settleFee();
-
-      setRedeemFee(redeemFee);
-      setSettleFee(settleFee);
+      try {
+        const redeemFee = await gammaRedeemer.redeemFee();
+        const settleFee = await gammaRedeemer.settleFee();
+        setRedeemFee(redeemFee);
+        setSettleFee(settleFee);
+      } catch (error) {
+        console.log(error)
+      }
       
       setIsLoading(false);
     }
