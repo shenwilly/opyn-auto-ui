@@ -11,7 +11,6 @@ import {
   Link,
   Flex,
   Spinner,
-  Box,
 } from "@chakra-ui/react"
 import { formatUnits } from "ethers/lib/utils";
 import { useEffect, useMemo, useState } from "react";
