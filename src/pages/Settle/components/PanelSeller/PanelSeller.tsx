@@ -17,11 +17,15 @@ import { useMemo, useState } from "react";
 import { BiLinkExternal } from 'react-icons/bi';
 import ModalSettle from "../../../../components/ModalSettle";
 import ModalVault from "../../../../components/ModalVault";
+import { ETHERSCAN_LINK_TYPE } from "../../../../constants";
+import useEthereum from "../../../../hooks/useEthereum";
 import useGamma from "../../../../hooks/useGamma";
 import { SubgraphOrder, SubgraphVault } from "../../../../types";
+import { buildEtherscanLink } from "../../../../utils/misc";
 
 const PanelSeller: React.FC = () => {
-    const { vaults, vaultsIsLoading, orders } = useGamma();
+    const { vaults, vaultsIsLoading, orders, orderFetchIsLoading } = useGamma();
+    const { chainId } = useEthereum();
     const useSettleModal = useDisclosure();
     const useVaultModal = useDisclosure();
     const [selectedVault, setSelectedVault] = useState<SubgraphVault>();
@@ -32,11 +36,11 @@ const PanelSeller: React.FC = () => {
     }, [orders]);
 
     const activeOrders = useMemo(() => {
-      return settleOrders?.filter((order) => !order.finished && order.isSeller) ?? [];
+      return settleOrders?.filter((order) => !order.finished) ?? [];
     }, [settleOrders]);
 
     const pastOrders = useMemo(() => {
-      return settleOrders?.filter((order) => order.finished && order.isSeller) ?? [];
+      return settleOrders?.filter((order) => order.finished) ?? [];
     }, [settleOrders]);
 
     const hasActiveOrder = (vaultId: string): boolean => {
@@ -93,7 +97,7 @@ const PanelSeller: React.FC = () => {
 
     return (
         <>
-          <Text my="4">My vaults</Text>
+          <Text mt="5" fontWeight="bold">My vaults</Text>
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -156,32 +160,44 @@ const PanelSeller: React.FC = () => {
             </Tbody>
           </Table>
 
-          {/* <Text my="4">Order History</Text>
+          <Text mt="5" fontWeight="bold">Order History</Text>
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>Collateral</Th>
-                <Th>Long</Th>
-                <Th>Short</Th>
-                <Th>Status</Th>
+                <Th>Vault Id</Th>
+                <Th isNumeric>Txn Hash</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {pastOrders && pastOrders.map((order) => (
+              {pastOrders && !orderFetchIsLoading && pastOrders.map((order) => (
                 <Tr key={order.orderId}>
-                  <Td>WETH 0.1</Td>
-                  <Td>-</Td>
-                  <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
+                  <Td>1</Td>
                   <Td>
-                    <Link href="https://chakra-ui.com" isExternal>
+                    <Link href={buildEtherscanLink(ETHERSCAN_LINK_TYPE.Tx, order.finishTxHash, chainId)} isExternal>
                         <Flex as="u">
-                          <Text mr="2">Settled</Text> <BiLinkExternal/>
+                          <Text mr="2">{order.finishTxHash}</Text> <BiLinkExternal/>
                         </Flex>
                       </Link>
                   </Td>
                 </Tr>
               ))}
-              <Tr>
+
+              {pastOrders && !orderFetchIsLoading && pastOrders.length === 0 &&
+                <Tr>
+                  <Td colSpan={2}>
+                    <Text textAlign="center">
+                      You have no previous orders
+                    </Text>
+                  </Td>
+                </Tr>}
+
+              {orderFetchIsLoading &&
+                <Tr>
+                  <Td colSpan={2} textAlign="center">
+                    <Spinner />
+                  </Td>
+                </Tr>}
+              {/* <Tr>
                 <Td>WETH 0.1</Td>
                 <Td>-</Td>
                 <Td>0.1 oWETHUSDC/WETH-30JUL21-2200C</Td>
@@ -192,9 +208,9 @@ const PanelSeller: React.FC = () => {
                       </Flex>
                     </Link>
                 </Td>
-              </Tr>
+              </Tr> */}
             </Tbody>
-          </Table> */}
+          </Table>
               
           {selectedVault && 
             <ModalSettle vault={selectedVault} isOpen={useSettleModal.isOpen} onClose={useSettleModal.onClose}/>}
