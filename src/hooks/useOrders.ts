@@ -70,7 +70,6 @@ export function useOrders(
 
   useEffect(() => {
     async function updateOrders() {
-      setFetchIsLoading(true)
       const orders = await getOrders(chainId, account);
       setFetchIsLoading(false)
       if (orders === null) return

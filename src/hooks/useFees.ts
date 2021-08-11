@@ -26,7 +26,6 @@ export function useFees(chainId: CHAIN_ID) {
       if (!injectedProvider) {
         return;
       }
-      setIsLoading(true);
 
       const gammaRedeemer = getGammaRedeemer();
       const redeemFee = await gammaRedeemer.redeemFee();
