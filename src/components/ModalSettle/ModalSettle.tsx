@@ -14,6 +14,8 @@ import { SubgraphVault } from "../../types";
 import { dateFormat } from "../../utils/date";
 import { getVaultOtoken } from "../../utils/gamma";
 import { formatFee } from "../../utils/misc";
+import ItalicText from "../ModalComponents/ItalicText";
+import TextField from "../ModalComponents/TextField";
 
 interface ModalProps {
   vault: SubgraphVault;
@@ -33,6 +35,12 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
   const isLoading = useMemo(() => {
     return setIsLoading || fetchIsLoading || createIsLoading;
   }, [setIsLoading, fetchIsLoading, createIsLoading])
+  
+  const expiryText = useMemo(() => {
+    return otoken 
+      ? dateFormat(parseInt(otoken.expiryTimestamp) * 1000)
+      : '-'
+  }, [otoken])
   
   const handleSetOperator = async () => {
     await setOperator(true);
@@ -55,6 +63,15 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
     onClose();
   }
 
+  const noticeText = useMemo(() => {
+    let text = "This vault will be settled automatically";
+    if (settleFee)text += ` with a ${formatFee(settleFee)}% fee`;
+    if (otoken) text += ` on expiry (${expiryText})`;
+    text += ".";
+
+    return text;
+  }, [settleFee, otoken]);
+
   return (
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -66,45 +83,49 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>
-              Collateral: {vault.collateralAsset !== null && vault.collateralAmount !== null 
-                      ? `${vault.collateralAsset?.symbol} ${formatUnits(vault.collateralAmount, vault.collateralAsset?.decimals)}`
-                      : '-'
-                    }
-            </Text>
+            <TextField 
+              title="Collateral:"
+              description={vault.collateralAsset !== null && vault.collateralAmount !== null 
+                ? `${vault.collateralAsset?.symbol} ${formatUnits(vault.collateralAmount, vault.collateralAsset?.decimals)}`
+                : '-'}
+              />
 
-            <Text>
-              Long: {vault.longAmount !== null && vault.longOToken !== null 
-                      ? `${formatUnits(vault.longAmount, vault.longOToken.decimals)} ${vault.longOToken?.symbol}`
-                      : '-'
-                    }
-            </Text>
+            <TextField 
+              title="Long Option:"
+              description={vault.longAmount !== null && vault.longOToken !== null 
+                ? `${formatUnits(vault.longAmount, vault.longOToken.decimals)} ${vault.longOToken?.symbol}`
+                : '-'}
+              />
 
-            <Text>
-              Short: {vault.shortAmount !== null && vault.shortOToken !== null 
-                      ? `${formatUnits(vault.shortAmount, vault.shortOToken.decimals)} ${vault.shortOToken?.symbol}`
-                      : '-'
-                    }
-            </Text>
+            <TextField 
+              title="Short Option:"
+              description={vault.shortAmount !== null && vault.shortOToken !== null 
+                ? `${formatUnits(vault.shortAmount, vault.shortOToken.decimals)} ${vault.shortOToken?.symbol}`
+                : '-'}
+              />
 
-            <Text>
-              Expiry: {otoken 
-                        ? dateFormat(parseInt(otoken.expiryTimestamp) * 1000)
-                        : '-'}
-            </Text>
+            <TextField 
+              title="Expiry:"
+              description={expiryText}
+              />
 
-            <Text>
-              Fee: {settleFee !== null
-                      ? `${formatFee(settleFee)}%`
-                      : '-'}
-            </Text>
+            <TextField 
+              title="Fee:"
+              description={settleFee !== null
+                ? `${formatFee(settleFee)}%`
+                : '-'}
+              />
+            
+            <ItalicText 
+              text={noticeText}
+            />
 
             {!isOperator &&
-              <Button w="100%" colorScheme="green" mt={5} mb={3}
+              <Button w="100%" colorScheme="green" mt={4} mb={3}
                 isLoading={isLoading}
                 onClick={handleSetOperator}>Set Operator</Button>}
             {isOperator &&
-              <Button w="100%" colorScheme="green" mt={5} mb={3}
+              <Button w="100%" colorScheme="green" mt={4} mb={3}
                 isLoading={isLoading}
                 onClick={handleCreate}>Create Settle Order</Button>}
           </ModalBody>

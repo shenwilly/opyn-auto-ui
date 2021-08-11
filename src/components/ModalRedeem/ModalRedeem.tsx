@@ -13,6 +13,8 @@ import { useOrders } from "../../hooks/useOrders";
 import { OTokenBalance } from "../../types";
 import { dateFormat } from "../../utils/date";
 import { formatFee } from "../../utils/misc";
+import ItalicText from "../ModalComponents/ItalicText";
+import TextField from "../ModalComponents/TextField";
 
 interface ModalProps {
   otoken: OTokenBalance;
@@ -38,6 +40,12 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
   const handleApprove = async () => {
     await approve();
   }
+  
+  const expiryText = useMemo(() => {
+    return otoken 
+      ? dateFormat(parseInt(otoken.token.expiryTimestamp) * 1000)
+      : '-'
+  }, [otoken])
 
   const handleCreate = async () => {
     await createOrder(otoken.token.id, otoken.balance, BigNumber.from(0));
@@ -51,6 +59,15 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
     onClose();
   }
 
+  const noticeText = useMemo(() => {
+    let text = "If profitable, this oToken will be redeemed automatically";
+    if (redeemFee)text += ` with a ${formatFee(redeemFee)}% fee`;
+    if (otoken) text += ` on expiry (${expiryText})`;
+    text += ".";
+
+    return text;
+  }, [redeemFee, otoken]);
+  
   return (
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -62,23 +79,31 @@ const ModalRedeem: React.FC<ModalProps> = ({ otoken, isOpen, onClose }) => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>
-              oToken: {otoken.token.symbol}
-            </Text>
+            <TextField 
+              title="oToken:"
+              description={otoken.token.symbol}
+              />
 
-            <Text>
-              Amount: {formatUnits(otoken.balance.toString(), otoken.token.decimals)}
-            </Text>
+            <TextField 
+              title="Amount:"
+              description={formatUnits(otoken.balance.toString(), otoken.token.decimals)}
+              />
 
-            <Text>
-              Expiry: {dateFormat(parseInt(otoken.token.expiryTimestamp) * 1000)}
-            </Text>
+            <TextField 
+              title="Expiry:"
+              description={expiryText}
+              />
 
-            <Text>
-              Fee: {redeemFee !== null
-                      ? `${formatFee(redeemFee)}%`
-                      : '-'}
-            </Text>
+            <TextField 
+              title="Fee:"
+              description={redeemFee !== null
+                ? `${formatFee(redeemFee)}%`
+                : '-'}
+              />
+
+            <ItalicText 
+              text={noticeText}
+            />
 
             {!isAllowanceEnough && 
               <Button w="100%" colorScheme="green" mt={5} mb={3}

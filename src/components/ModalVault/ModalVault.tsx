@@ -4,6 +4,7 @@ import {
 } from "@chakra-ui/react"
 import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
+import { useMemo } from "react";
 import useEthereum from "../../hooks/useEthereum";
 import useGamma from "../../hooks/useGamma";
 import { useOrders } from "../../hooks/useOrders";
@@ -11,6 +12,8 @@ import { SubgraphOrder, SubgraphVault } from "../../types";
 import { dateFormat } from "../../utils/date";
 import { getVaultOtoken } from "../../utils/gamma";
 import { formatFee } from "../../utils/misc";
+import ItalicText from "../ModalComponents/ItalicText";
+import TextField from "../ModalComponents/TextField";
 
 interface ModalProps {
   vault: SubgraphVault;
@@ -26,6 +29,12 @@ const ModalVault: React.FC<ModalProps> = ({ vault, order, isOpen, onClose }) => 
   const otoken = getVaultOtoken(vault);
   const toast = useToast();
   
+  const expiryText = useMemo(() => {
+    return otoken 
+      ? dateFormat(parseInt(otoken.expiryTimestamp) * 1000)
+      : '-'
+  }, [otoken])
+  
   const handleCancel = async () => {
     await cancelOrder(BigNumber.from(order.orderId));
     refetchVaults();
@@ -37,7 +46,7 @@ const ModalVault: React.FC<ModalProps> = ({ vault, order, isOpen, onClose }) => 
     })
     onClose();
   }
-  
+
   return (
       <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -49,38 +58,42 @@ const ModalVault: React.FC<ModalProps> = ({ vault, order, isOpen, onClose }) => 
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text>
-            Collateral: {vault.collateralAsset !== null && vault.collateralAmount !== null 
-                      ? `${vault.collateralAsset?.symbol} ${formatUnits(vault.collateralAmount, vault.collateralAsset?.decimals)}`
-                      : '-'
-                    }
-          </Text>
-          
-          <Text>
-            Long: {vault.longAmount !== null && vault.longOToken !== null 
-                      ? `${formatUnits(vault.longAmount, vault.longOToken.decimals)} ${vault.longOToken?.symbol}`
-                      : '-'
-                    }
-          </Text>
+          <TextField 
+            title="Collateral:"
+            description={vault.collateralAsset !== null && vault.collateralAmount !== null 
+              ? `${vault.collateralAsset?.symbol} ${formatUnits(vault.collateralAmount, vault.collateralAsset?.decimals)}`
+              : '-'}
+            />
 
-          <Text>
-            Short: {vault.shortAmount !== null && vault.shortOToken !== null 
-                      ? `${formatUnits(vault.shortAmount, vault.shortOToken.decimals)} ${vault.shortOToken?.symbol}`
-                      : '-'
-                    }
-          </Text>
+          <TextField 
+            title="Long Option:"
+            description={vault.longAmount !== null && vault.longOToken !== null 
+              ? `${formatUnits(vault.longAmount, vault.longOToken.decimals)} ${vault.longOToken?.symbol}`
+              : '-'}
+            />
 
-          <Text>
-            Expiry: {otoken 
-                      ? dateFormat(parseInt(otoken.expiryTimestamp) * 1000)
-                      : '-'}
-          </Text>
+          <TextField 
+            title="Short Option:"
+            description={vault.shortAmount !== null && vault.shortOToken !== null 
+              ? `${formatUnits(vault.shortAmount, vault.shortOToken.decimals)} ${vault.shortOToken?.symbol}`
+              : '-'}
+            />
 
-          <Text>
-            Fee: {order.fee !== null
-                    ? `${formatFee(order.fee)}%`
-                    : '-'}
-          </Text>
+          <TextField 
+            title="Expiry:"
+            description={expiryText}
+            />
+
+          <TextField 
+            title="Fee:"
+            description={order.fee !== null
+              ? `${formatFee(order.fee)}%`
+              : '-'}
+            />
+
+          <ItalicText 
+            text="Cancel automatic vault settlement?"
+            />
 
           <Button w="100%" colorScheme="orange" mt={5} mb={3}
             isLoading={isLoading}
