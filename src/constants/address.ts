@@ -1,7 +1,7 @@
 import { CHAIN_ID } from ".";
 
 export const GAMMA_REDEEMER_ADDRESS: {[key in CHAIN_ID]: string} = {
-  [CHAIN_ID.MAINNET]: "0xa9bc42ac855be4026ce3ce031f91c8f796122282",
+  [CHAIN_ID.MAINNET]: "0x4687129e66a17af63b903e7ce0eae3576623ac90",
   [CHAIN_ID.ROPSTEN]: "0x9c08febE5979CBc0F5a04ec55c644fa9d9B3F27F",
 };
 
