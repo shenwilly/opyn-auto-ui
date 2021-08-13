@@ -127,6 +127,7 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
             {isOperator &&
               <Button w="100%" colorScheme="green" mt={4} mb={3}
                 isLoading={isLoading}
+                isDisabled={otoken === null}
                 onClick={handleCreate}>Create Settle Order</Button>}
           </ModalBody>
         </ModalContent>

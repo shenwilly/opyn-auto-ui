@@ -58,7 +58,7 @@ const PanelSeller: React.FC = () => {
       let status = ""
       
       if (vault.longOToken === null && vault.shortOToken === null) {
-        return "Redeemable"
+        return "-"
       } else if (vault.shortOToken !== null) {
         const otoken = vault.shortOToken;
         const timestamp = Math.round(Date.now() / 1000);
@@ -102,6 +102,7 @@ const PanelSeller: React.FC = () => {
           <Table variant="simple">
             <Thead>
               <Tr>
+                <Th textAlign="center">Vault ID</Th>
                 <Th>Collateral</Th>
                 <Th>Long</Th>
                 <Th>Short</Th>
@@ -112,6 +113,9 @@ const PanelSeller: React.FC = () => {
             <Tbody>
               {vaults && !vaultsIsLoading && vaults.map((vault) => (
                 <Tr key={vault.vaultId}>
+                  <Td textAlign="center">
+                    {vault.vaultId}
+                  </Td>
                   <Td>
                     {vault.collateralAsset !== null && vault.collateralAmount !== null 
                       ? `${vault.collateralAsset?.symbol} ${formatUnits(vault.collateralAmount, vault.collateralAsset?.decimals)}`
@@ -129,7 +133,6 @@ const PanelSeller: React.FC = () => {
                       ? `${formatUnits(vault.shortAmount, vault.shortOToken.decimals)} ${vault.shortOToken?.symbol}`
                       : '-'
                     }
-                    {/* 0.1 oWETHUSDC/WETH-30JUL21-2200C */}
                   </Td>
                   <Td textAlign="center">
                     {getStatus(vault)}
@@ -166,7 +169,7 @@ const PanelSeller: React.FC = () => {
             <Thead>
               <Tr>
                 <Th>Date Time</Th>
-                <Th>Vault Id</Th>
+                <Th textAlign="center">Vault Id</Th>
                 <Th>Status</Th>
               </Tr>
             </Thead>
@@ -174,7 +177,7 @@ const PanelSeller: React.FC = () => {
               {pastOrders && !orderFetchIsLoading && pastOrders.map((order) => (
                 <Tr key={order.orderId}>
                   <Td>{dateFormat(parseInt(order.timestamp) * 1000)}</Td>
-                  <Td>1</Td>
+                  <Td textAlign="center">{order.vaultId}</Td>
                   <Td>
                     <Link href={buildEtherscanLink(ETHERSCAN_LINK_TYPE.Tx, order.finishTxHash, chainId)} isExternal>
                         <Flex as="u">
