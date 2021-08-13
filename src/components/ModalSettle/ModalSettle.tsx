@@ -5,7 +5,7 @@ import {
 import { BigNumber, ethers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { useMemo } from "react";
-import { GAMMA_CONTROLLER_ADDRESS, GAMMA_REDEEMER_ADDRESS } from "../../constants/address";
+import { GAMMA_REDEEMER_ADDRESS } from "../../constants/address";
 import useEthereum from "../../hooks/useEthereum";
 import useGamma from "../../hooks/useGamma";
 import { useOperator } from "../../hooks/useOperator";
