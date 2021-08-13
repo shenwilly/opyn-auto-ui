@@ -5,7 +5,7 @@ import {
 import { BigNumber, ethers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { useMemo } from "react";
-import { GAMMA_CONTROLLER_ADDRESS } from "../../constants/address";
+import { GAMMA_CONTROLLER_ADDRESS, GAMMA_REDEEMER_ADDRESS } from "../../constants/address";
 import useEthereum from "../../hooks/useEthereum";
 import useGamma from "../../hooks/useGamma";
 import { useOperator } from "../../hooks/useOperator";
@@ -27,7 +27,7 @@ const ModalSettle: React.FC<ModalProps> = ({ vault, isOpen, onClose }) => {
   const { accountAddress, chainId } = useEthereum();
   const { refetchVaults, settleFee } = useGamma();
   const { setOperator, isLoading:setIsLoading, 
-    isOperator, fetchIsLoading, refetch:refetchIsOperator } = useOperator(GAMMA_CONTROLLER_ADDRESS[chainId], chainId);
+    isOperator, fetchIsLoading, refetch:refetchIsOperator } = useOperator(GAMMA_REDEEMER_ADDRESS[chainId], chainId);
   const { createOrder, isLoading:createIsLoading } = useOrders(accountAddress, chainId);
   const otoken = getVaultOtoken(vault);
   const toast = useToast();
