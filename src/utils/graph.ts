@@ -158,7 +158,11 @@ export async function getOrders(
 ): Promise<SubgraphOrder[] | null> {
   const query = `
   {
-    orders(where: {owner: "${account}"}) {
+    orders(
+      where: {owner: "${account}"}, 
+      orderDirection: desc,
+      orderBy: timestamp
+    ) {
       orderId
       owner
       otoken
