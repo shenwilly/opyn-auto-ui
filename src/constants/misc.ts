@@ -5,3 +5,5 @@ export const STRIKE_PRICE_DECIMALS = 8;
 export const repoGithubUrl = "https://github.com/shenwilly/opyn-auto";
 
 export const contractEtherscanUrl = "https://etherscan.io/address/0xa9bc42ac855be4026ce3ce031f91c8f796122282";
+
+export const opynUrl = "https://v2.opyn.co/#/";

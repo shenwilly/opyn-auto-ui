@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from "react";
 import { BiLinkExternal } from 'react-icons/bi';
 import ModalOtoken from "../../../../components/ModalOtoken";
 import ModalRedeem from "../../../../components/ModalRedeem/ModalRedeem";
-import { CHAIN_ID, ETHERSCAN_LINK_TYPE, STRIKE_PRICE_DECIMALS } from "../../../../constants";
+import { CHAIN_ID, ETHERSCAN_LINK_TYPE, opynUrl, STRIKE_PRICE_DECIMALS } from "../../../../constants";
 import useEthereum from "../../../../hooks/useEthereum";
 import useGamma from "../../../../hooks/useGamma";
 import { OTokenBalance, SubgraphOrder, SubgraphOToken } from "../../../../types";
@@ -153,7 +153,9 @@ const PanelBuyer: React.FC = () => {
                 <Tr>
                   <Td colSpan={7}>
                     <Text textAlign="center">
-                      You have no oTokens
+                      You have no oTokens. <Link href={opynUrl} color="blue" textDecoration="underline" isExternal>
+                        Buy some options?
+                      </Link>
                     </Text>
                   </Td>
                 </Tr>}
