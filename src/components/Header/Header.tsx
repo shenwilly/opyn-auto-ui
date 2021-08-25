@@ -7,7 +7,7 @@ const Header = () => {
     return (
         <StyledHeader maxW="container.xl">
             <StyledRow align="center">
-                <Text textStyle="appTitle">Opyn Gamma Automator</Text>
+                <Text textStyle="appTitle">AutoGamma</Text>
                 <Spacer />
                 <Web3Account />
             </StyledRow>
